@@ -8,7 +8,7 @@ int main(void) {
 	using namespace std;
 	using namespace cimg_library;
 	
-	std::vector<std::vector<double> > values(6, std::vector<double>(4));
+	vector<vector<double> > values(6, vector<double>(4));
 	
 	for(int i = 0; i < values.size(); ++i)
 	{
@@ -24,7 +24,9 @@ int main(void) {
 	std::cout << std::endl;
 	printData(Sum);
 	*/
-	ReadData("boy.jpg");
+	vector<vector<double> > X = DataToMatrix("boy.jpg");
+	vector<vector<double> > Sum = IntegralImage(X);
+	//printData(Sum);
 	
 	return 0;
  }

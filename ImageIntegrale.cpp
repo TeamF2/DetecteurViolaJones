@@ -55,6 +55,40 @@ std::vector<double> ReadData(const char *filepath) {
 	  return out;
 }
 
+std::vector<std::vector<double> > DataToMatrix(const char *filepath) {
+	using namespace std;
+	using namespace cimg_library;
+	CImg<unsigned char> image(filepath);
+	
+	int width = image.width();
+	int height = image.height();
+	int depth = image.depth();
+	
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	vector<vector<double> > out(width, vector<double>(height));
+	
+	for (CImg<unsigned char>::iterator it = image.begin(); it != image.end(); ++it) {
+		out[i][j] = ((double)*it) / 255.0;
+		++it;
+		out[i][j] += ((double)*it) / 255.0;
+		++it;
+		out[i][j] += ((double)*it) / 255.0;
+		
+		j++;
+		j %= height;
+		if(j==0) {
+			i++;
+		}
+	  }
+	  //cout << endl;
+	  cout << width << "x" << height << "x" << depth << endl;
+	  cout << out.size() << "x" << out[0].size() << "x" << endl;
+	  
+	  return out;
+}
+
 void printData(std::vector<std::vector<double> >& data) {
 	using namespace std;
 	

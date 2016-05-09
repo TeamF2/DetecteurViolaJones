@@ -9,6 +9,9 @@ std::vector<std::vector<double> > IntegralImage(std::vector<std::vector<double> 
 // Read an image
 std::vector<double> ReadData(const char *filepath);
 
+//
+std::vector<std::vector<double> > DataToMatrix(const char *filepath);
+
 // Print a vector of vectors
 void printData(std::vector<std::vector<double> >& data);
 
