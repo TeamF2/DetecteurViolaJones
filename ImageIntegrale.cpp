@@ -70,11 +70,11 @@ std::vector<std::vector<double> > DataToMatrix(const char *filepath) {
 	vector<vector<double> > out(width, vector<double>(height));
 	
 	for (CImg<unsigned char>::iterator it = image.begin(); it != image.end(); ++it) {
-		out[i][j] = ((double)*it) / 255.0;
+		out[i][j] = 0.2989 * ((double)*it);
 		++it;
-		out[i][j] += ((double)*it) / 255.0;
+		out[i][j] += 0.5870 * ((double)*it);
 		++it;
-		out[i][j] += ((double)*it) / 255.0;
+		out[i][j] += 0.1140 * ((double)*it);
 		
 		j++;
 		j %= height;

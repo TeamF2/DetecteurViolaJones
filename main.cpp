@@ -8,6 +8,8 @@ int main(void) {
 	using namespace std;
 	using namespace cimg_library;
 	
+	/*
+	// Test IntegralImage  works
 	vector<vector<double> > values(6, vector<double>(4));
 	
 	for(int i = 0; i < values.size(); ++i)
@@ -17,8 +19,7 @@ int main(void) {
 			values[i][j] = 6;
 		}
 	}
-		
-	/*							
+							
 	std::vector<std::vector<double> > Sum = IntegralImage(values);
 	printData(values);
 	std::cout << std::endl;

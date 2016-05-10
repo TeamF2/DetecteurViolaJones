@@ -70,6 +70,10 @@ cimgvec: cimgvec.cpp Makefile
 main: ImageIntegrale.* main.cpp Makefile
 		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp main.cpp $(LIBS)
 
+# rule for exercise 1
+question_2: ImageIntegrale.* main.cpp Makefile
+		$(CXX) $(mpic++) $(INCLUDE) -o $@ ImageIntegrale.cpp main.cpp $(LIBS)
+
 # clean objects and executable
 clean:
 	$(RM) $(OBJS) $(BIN) box_muller cimgvec k_means
