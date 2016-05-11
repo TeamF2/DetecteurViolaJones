@@ -102,3 +102,37 @@ void printData(std::vector<std::vector<double> >& data) {
       cout << endl;
     }
 }
+
+//Q1.1
+std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//summed area table
+    //img must be int- or char-typed
+    using namespace cimg_library;
+    std::vector<std::vector<long>> sat;
+    std::vector<long> row;
+    long init=0;
+    std::vector<std::vector<long>>::iterator it;
+    std::vector<long>::iterator i,j;
+
+    
+    for(int y=0;y<img.height();y++){//init first row
+        init+=img(0,y);
+        row.push_back(init);
+    }
+
+    row.clear();
+    it=sat.begin();
+    for (int x=1; x<img.width(); x++,sat.push_back(row),it++,row.clear()) {
+        // iterating through: it,x-> rows; i,y->current row; j->previous row
+       
+        //initialization
+        j=it->begin();
+        row.push_back( *j++ + img(x,0));
+        i=row.begin();
+        
+        //row iteration
+        for (int y=1; y<img.height(); y++,i++,j++)
+                row.push_back(img(x,y) + *j + *i - *(j-1));
+    }
+    return sat;
+}
+
