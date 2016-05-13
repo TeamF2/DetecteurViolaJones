@@ -122,17 +122,52 @@ std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//summed
     row.clear();
     it=sat.begin();
     for (int x=1; x<img.width(); x++,sat.push_back(row),it++,row.clear()) {
-        // iterating through: it,x-> rows; i,y->current row; j->previous row
+        // iterating through: it,x-> rows; i,y->columns in current row; j->columns previous row
        
         //initialization
         j=it->begin();
         row.push_back( *j++ + img(x,0));
         i=row.begin();
         
-        //row iteration
+        //column iteration
         for (int y=1; y<img.height(); y++,i++,j++)
                 row.push_back(img(x,y) + *j + *i - *(j-1));
     }
     return sat;
 }
+
+//Q1.2
+void initAndScanRow(const cimg_library::CImg<long>& img,std::vector<long> row, int i){
+    long init=0;
+    for(int y=0;y<img.height();y++){//initialize (summed) i-th row
+        init+=img(i,y);
+        row.push_back(init);
+    }
+}
+
+void scanCollumn(std::vector<std::vector<long>> sat,int i){
+    long init=0;
+    for(int x=0;x<img.width();x++){//sum i-th column
+        init+=sat[x][i];
+        sat[x][i]=init;
+    }
+}
+
+std::vector<std::vector<long>> parSAT(const cimg_library::CImg<long>& img){
+    std::vector<std::vector<long>> sat = new std::vector<std::vector<long>>(img.height(), std::vector<long>());
+    std::vector<std::thread> rowSum, columnSum;
+
+    for (int i=0; i<img.width(); i++)   //init and scan rows
+        rowSum.push_back(std::thread(initAndScanRow(img,sat[i],i)));
+    for (int i=0; i<img.width(); i++)
+        rowSum[i].join();
+    
+    for (int i=0; i<img.height(); i++)  //scan columns
+        columnSum.push_back(std::thread(scanCollumn(sat,i)));
+    for (int i=0; i<img.height(); i++)
+        columnSum[i].join();
+    
+    return sat;
+}
+
 
