@@ -21,10 +21,24 @@ void printData(std::vector<std::vector<double> >& data);
 std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img);    //Summed Area Table
 
 //Q1.2
-void initAndScanRow(const cimg_library::CImg<long>& img,std::vector<long> row, int i); //aux1
+class feature{
+	int x,y,w,h;
+	char type;
 
-void scanCollumn(std::vector<std::vector<long>> sat,int i); //aux2
+	feature();
+};
 
-std::vector<std::vector<long>> parSAT(const cimg_library::CImg<long>& img); //parALLEL SAT
+long calcFeat(std::vector<std::vector<long>> sat, feature f);
+
+void featVect(std::vector<feature>& feats, char type,int wMax, int hMax);
+
+std::vector<feature> distFeat(int widht, int height);
+
+//
+struct classifier{
+	double w1,w2;
+};
+
+void clasf(classifier c);
 
 #endif

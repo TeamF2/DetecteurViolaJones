@@ -7,6 +7,10 @@
 int main(void) {
 	using namespace std;
 	using namespace cimg_library;
+	std::vector<feature> feats;
+	int width,height;
+
+	feats=distFeat(width,height);
 	
 	/*
 	// Test IntegralImage  works
@@ -29,5 +33,6 @@ int main(void) {
 	vector<vector<double> > Sum = IntegralImage(X);
 	//printData(Sum);
 	
+    MPI_Finalize();
 	return 0;
  }
