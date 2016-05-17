@@ -12,6 +12,8 @@ int main(void) {
 
 	feats=distFeat(width,height);
 	
+
+
 	/*
 	// Test IntegralImage  works
 	vector<vector<double> > values(6, vector<double>(4));
@@ -33,6 +35,5 @@ int main(void) {
 	vector<vector<double> > Sum = IntegralImage(X);
 	//printData(Sum);
 	
-    MPI_Finalize();
 	return 0;
  }

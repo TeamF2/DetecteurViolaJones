@@ -136,7 +136,15 @@ std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//summed
 }
 
 //Q1.2
-
+class feature{
+	feature(int xx, int yy, int ww,int hh,char c){
+		x=xx;
+		y=yy;
+		w=ww;
+		h=hh;
+		type=c;
+	}
+};
 
 long calcFeat(std::vector<std::vector<long>> sat, feature f){
 	switch(f.type){
@@ -192,7 +200,6 @@ void featVect(std::vector<feature>& feats, char type,int wMax, int hMax){
 	}
 }
 
-
 std::vector<feature> distFeat(int widht, int height){
 	std::vector<feature> fA,fB,fC,fD;
 
@@ -212,26 +219,51 @@ std::vector<feature> distFeat(int widht, int height){
 	return fA;
 }
 
-class feature{
-	feature(int xx, int yy, int ww,int hh,char c){
-		x=xx;
-		y=yy;
-		w=ww;
-		h=hh;
-		type=c;
-	}
-};
 
 //Q2.1
 
-void clasf(classifier c){
-	c.w1=1;
-	c.w2=0;
-	int K=100000
-	double eps=0.5;
+std::vector<std::vector<std::vector<long> > > distII(){
 
-	for(int k=0;k<K;k++){
-		c.w1-= eps*(hixk-ck)
+}
+
+void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats ){
+	srand(taskId);
+	double r,h.xki;
+	int rr,c;
+	for(int i=taskId;i<tables.size());i+=nTasks){
+		classf[i].w1=1;
+		classf[i].w2=0;
+		int K=100000;
+		double eps=0.5;
+
+		for(int k=0;k<K;k++){
+			r=srand()/RAND_MAX;
+			rr=((int)r*tables.size()-1);
+
+			xki=calcFeat(tables[i],feats[i]);
+			if(classf[i].w1*xki+classf[i].w2>=0)
+				h=1;
+			else
+				h=-1;
+
+			if(rr<nPos)
+				c=1;
+			else
+				c=-1;
+
+			classf[i].w1-=eps*(h-c)*xki;
+			classf[i].w2-=eps*(h-c);
+		}
 	}
 }
+
+void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats ){
+	std::vector<std::thread> threads;
+	for(int i=0;i<nTasks;i++)
+		threads.push_back(std::thread(train,nTasks,i,nPos,tables,classf,feats));
+
+	for(int i=0;i<nTasks;i++)
+		threads[i].join();
+}
+
 

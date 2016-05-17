@@ -34,11 +34,15 @@ void featVect(std::vector<feature>& feats, char type,int wMax, int hMax);
 
 std::vector<feature> distFeat(int widht, int height);
 
-//
-struct classifier{
+//Q2.1
+class classifier{
 	double w1,w2;
 };
 
-void clasf(classifier c);
+std::vector<std::vector<std::vector<long> > > distII();
+
+void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats );
+
+
 
 #endif
