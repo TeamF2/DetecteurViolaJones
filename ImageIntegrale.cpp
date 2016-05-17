@@ -230,11 +230,12 @@ void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<
 	srand(taskId);
 	double r,h.xki;
 	int rr,c;
+	double eps=0.3; //0<eps<=1
+	int K=tables.size()/5;
+
 	for(int i=taskId;i<tables.size());i+=nTasks){
 		classf[i].w1=1;
 		classf[i].w2=0;
-		int K=100000;
-		double eps=0.5;
 
 		for(int k=0;k<K;k++){
 			r=srand()/RAND_MAX;

@@ -43,6 +43,10 @@ std::vector<std::vector<std::vector<long> > > distII();
 
 void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats );
 
+void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats );
+
+
+//Q2.2
 
 
 #endif
