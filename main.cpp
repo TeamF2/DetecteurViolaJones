@@ -10,8 +10,31 @@ int main(void) {
 	std::vector<feature> feats;
 	int width,height;
 
+
+
+
+	//1-Define features
 	feats=distFeat(width,height);
 	
+	//2-Read "Train" repertory images
+
+
+	//3-Create weak classifiers
+
+
+	//4-Read "Validation" repertory images
+
+
+	//5-Boost weak classifiers
+
+
+	//6-Vary theta (-1<theta<1)
+
+
+	//7-
+
+
+
 
 
 	/*

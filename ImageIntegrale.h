@@ -37,6 +37,7 @@ std::vector<feature> distFeat(int widht, int height);
 //Q2.1
 class classifier{
 	double w1,w2;
+	classifier(double,double);
 };
 
 std::vector<std::vector<std::vector<long> > > distII();
@@ -47,6 +48,15 @@ void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> t
 
 
 //Q2.2
+bool error(classifier c, bool clas,feature feat,std::vector<std::vector<long>> sat);
+
+void chooseClasf(int& clas,double& error);
+
+void boost();
+
+int F(std::vector<double>weights,std::vector<classifier> classf, std::vector<std::vector<long>>sat,double theta);
+
+
 
 
 #endif

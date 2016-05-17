@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "CImg.h"
 #include "ImageIntegrale.h"
+#include "math.h"
 
 std::vector<std::vector<double> > IntegralImage(std::vector<std::vector<double> >& data) {
 	using namespace std;
@@ -221,8 +222,15 @@ std::vector<feature> distFeat(int widht, int height){
 
 
 //Q2.1
+class classifier{
+	classifier(double ww1,double ww2){
+		w1=ww1;
+		w2=ww2;
+	}
+};
 
 std::vector<std::vector<std::vector<long> > > distII(){
+	//TODO
 
 }
 
@@ -265,6 +273,55 @@ void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> t
 
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();
+}
+
+
+//Q2.2
+bool error(classifier c, bool clas,feature feat,std::vector<std::vector<long>> sat){
+	return c.w1*calcFeat(sat,feat)+c.w2>=0 ;
+}
+
+void chooseClasf(int& clas,double& error){
+	//TODO
+
+}
+
+void boost(){
+	std::vector<double> weights(nImages,1/nImages);
+	std::vector<double> f(classf.size(),0);
+	int N=nImages;
+	int clas=0;
+	double error,alfak;
+
+	for(int k=0;k<N;k++){
+		chooseClasf(clas,error);
+		alfak=log((1-error)/error);
+		f[clas]+=alfak;
+		updateWeights(weights,f,alfak);
+	}
+}
+
+int F(std::vector<double>weights,std::vector<classifier> classf, std::vector<std::vector<long>>sat,double theta){
+	double fNx=0,f=0,w=0,x;
+	int h;
+	for(int i=0;i<weights.size();i++){
+		w=weights[i];
+		if(w){
+			f+=w;
+
+			x=calcFeat(tables[i],feats[i]);
+			if(classf[i].w1*x+classf[i].w2>=0)
+				h=1;
+			else
+				h=-1;
+			fNx+=w*h;
+		}
+	}
+
+	if(fNx>=theta*f)
+		return 1;
+	else
+		return -1;
 }
 
 
