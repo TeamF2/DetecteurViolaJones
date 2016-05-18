@@ -238,9 +238,39 @@ class classifier{
 	}
 };
 
-std::vector<std::vector<std::vector<long> > > distII(){
-	//TODO
+void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep){////TODO conferir
+	CImg<long> img;
+	if(pos){
+		for(int i=taskId;i<nPos;i+=nTasks){
+			img=CImg(rep+"im"+i+".jpg");
+			iis[i]=SAT(img);
+		}
+	}
+	else{
+		for(int i=nPos+taskId;i<iis.size();i+=nTasks){
+			img=CImg(rep+"im"+i+".jpg");
+			iis[i]=SAT(img);
+		}
+	}
 
+}
+
+
+std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::string rep,int& nTasks){//TODO conferir
+	std::vector<std::vector<std::vector<long> > > ii(nPos+nNeg)
+	std::vector<std::thread> pos,neg;
+	for(int i=0;i<nTasks;i++)
+			pos.push_back(std::thread(readImgs,nTasks,i,true,nPos,ii,rep+"/pos/"));
+
+	for(int i=0;i<nTasks;i++){
+			pos[i].join();
+			neg.push_back(std::thread(readImgs,nTasks,i,false,nPos,ii,rep+"/neg/"));
+	}
+
+	for(int i=0;i<nTasks;i++)
+			neg[i].join();
+
+	return ii;
 }
 
 void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){///TODO

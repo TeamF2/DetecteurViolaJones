@@ -44,14 +44,16 @@ public:
 	int calc(double);
 };
 
-std::vector<std::vector<std::vector<long> > > distII();
+void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep);
+
+std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::string rep,int& nTasks);
 
 void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats );
 
 void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats);
 
 
-//Q2.2
+//Q2.2+
 bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<long>>& sat);
 
 int chooseClasf(double& error,std::vector<classifier>& classf);
@@ -64,14 +66,14 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 
 //TODO
 /*fazer:
- * IntegralImage dist
- * train
  * chooseClasf
  * updateWeights
  * MAIN
  *
  * conferir:
+ * distII (readImgs)
  * calcFeat
+ * train
  */
 
 
