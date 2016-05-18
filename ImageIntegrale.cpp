@@ -255,7 +255,7 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 
 
 std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::string rep,int& nTasks){//TODO conferir
-	std::vector<std::vector<std::vector<long> > > ii(nPos+nNeg)
+	std::vector<std::vector<std::vector<long> > > ii(nPos+nNeg); // semicolon fix
 	std::vector<std::thread> pos,neg;
 	for(int i=0;i<nTasks;i++)
 			pos.push_back(std::thread(readImgs,nTasks,i,true,nPos,ii,rep+"/pos/"));
@@ -312,7 +312,7 @@ bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long
 	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
-void chooseClasf(int& nTasks, int taskId, int& nPos, double& error,int& ind,
+void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
 std::vector<classifier>& classf, std::vector<double>& weights,
 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	//TODO
@@ -333,10 +333,10 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		
 		
 		if(i==0) { // Initialize error
-			error = locerr;
+			currerr = locerr;
 			ind = 0;
-		} else if(error < locerr) { // Take the min
-			error = locerr;
+		} else if(currerr < locerr) { // Take the min
+			currerr = locerr;
 			ind = i;			
 		}
 		
@@ -345,7 +345,7 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	}
 }
 
-int parChooseClasf(int& nTasks, int& nPos, double& error,
+int parChooseClasf(int& nTasks, int& nPos, double& currerr,
 std::vector<classifier>& classf, std::vector<double>& weights,
 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables) {
 	int ind=0;
@@ -362,10 +362,10 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	for(int i = 0; i < nTasks; ++i)
 	{
 		if(i==0) { // Init
-			error = err[i];
+			currerr = err[i];
 			ind = indices[i];
-		} else if(error < err[i]) { // Take the min
-			error = err[i]; // Update error
+		} else if(currerr < err[i]) { // Take the min
+			currerr = err[i]; // Update error
 			ind = indices[i]; // Update argmin(error)
 		}
 	}
@@ -373,11 +373,11 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	return ind;
 }
 
-void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c){
+void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats){
 	//TODO
 	for(int i = Taskid; i < weights.size(); i+=nTasks)
 	{
-		if(c) weights[i] *= exp(alfak*classf.calc(tables[i]));
+		if(c) weights[i] *= exp(alfak*classf.calc(calcFeat(tables[i],feats[i]))); // Conferir, pas sur...
 	}
 }
 
