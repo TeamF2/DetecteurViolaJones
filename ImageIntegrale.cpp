@@ -373,8 +373,35 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	return ind;
 }
 
-void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){
+void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c){
 	//TODO
+	for(int i = Taskid; i < weights.size(); i+=nTasks)
+	{
+		if(c) weights[i] *= exp(alfak*classf.calc(tables[i]));
+	}
+}
+
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos){
+	//TODO
+	std::vector<std::thread> threads;
+	
+	for(int i=0;i<nTasks;i++)
+		threads.push_back(std::thread(updateWeights,nTasks,i,weights,alfak,classf,tables, i<Npos));
+	
+	for(int i=0;i<nTasks;i++)
+		threads[i].join();
+	
+	double sum = 0; // compute sum to normalise
+	for(int i = 0; i < weights.size(); ++i)
+	{
+		sum+= weights[i];
+	}
+	
+	for(size_t i = 0; i < weights.size(); ++i)
+	{ // normalising weigths
+		weights[i] /= sum;
+	}
+	
 }
 
 std::vector<double> boost(std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){//OK
