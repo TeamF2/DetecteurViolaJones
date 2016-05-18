@@ -14,16 +14,19 @@ int main(int argc, char** argv) {
 	
 	// Loading image
 	CImg<long> image("ProjSrc/app/pos/im0.jpg");
+	cout << "Loaded Image!!" << endl;
 	
 	// Computing the Integral Image
 	std::vector<std::vector<long> > sat = SAT(image);
+	cout << "Calculated SAT!!" << endl;
 	
 	// Show Integral Image dimentions
-	std::cout << "Image dimentions"<< std::endl; 
+	std::cout << "Image dimensions"<< std::endl; 
 	std::cout << sat.size()<< "x"<< sat[0].size() << std::endl;
 	
 	// Print the Integral Image
 	printData(sat);
+	cout << "Finished Print!!" << endl;
 	
 	return 0;
  }

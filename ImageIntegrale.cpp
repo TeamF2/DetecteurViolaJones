@@ -7,7 +7,7 @@
 #include "math.h"
 #include <thread>
 
-std::vector<std::vector<double> > IntegralImage(std::vector<std::vector<double> >& data) {
+std::vector<std::vector<double> > IntegralImage(std::vector<std::vector<long> >& data) {
 	using namespace std;
 	int m = data.size();
 	int n = data[0].size();
@@ -109,33 +109,23 @@ void printData(std::vector<std::vector<long> >& data) {
 //Q1.1
 std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//OK
     using namespace cimg_library;
-    std::vector<std::vector<long>> sat;
-    std::vector<long> row;
+	int height=img.height(),width=img.width();
+    std::vector<std::vector<long> > sat(width, std::vector<long>(height,0));
     long init=0;
-    std::vector<std::vector<long>>::iterator it;
-    std::vector<long>::iterator i,j;
 
-    
-    for(int y=0;y<img.height();y++){//init first row
+    for(int y=0;y<height;y++){//init first row
         init+=img(0,y,0);
-        row.push_back(init);
+        sat[0][y] = init;
     }
 
-    sat.push_back(row);
-    row.clear();
-    it=sat.begin();
-    for (int x=1; x<img.width(); x++,sat.push_back(row),it++,row.clear()) {
-        // iterating through: it,x-> rows; i,y->columns in current row; j->columns in previous row
-       
+    for (int x=1; x<width; x++) {
         //row initialization
-        j=it->begin();
-        row.push_back( *j + img(x,0,0));
-        j++;
-        i=row.begin();
+        sat[x][0] = sat[x-1][0] + img(x,0,0);
         
         //column iteration
-        for (int y=1; y<img.height(); y++,i++,j++)
-                row.push_back(img(x,y,0) + *j + *i - *(j-1));
+        for (int y=1; y<height; y++)
+			sat[x][y] = img(x,y,0) + sat[x-1][y] + sat[x][y-1] - sat[x-1][y-1];
+
     }
     return sat;
 }
