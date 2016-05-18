@@ -69,7 +69,7 @@ void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& 
 
 void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, std::vector<feature>& feats, int& clas);
 
-std::vector<double> boost();
+std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats);
 
 //Q3.1
 
