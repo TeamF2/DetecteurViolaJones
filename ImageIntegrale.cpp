@@ -240,13 +240,13 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 	CImg<long> img;
 	if(pos){
 		for(int i=taskId;i<nPos;i+=nTasks){
-			img=CImg(rep+"im"+i+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
+			img.load(rep+"im"+std::to_string(i)+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
 			iis[i]=SAT(img);
 		}
 	}
 	else{
 		for(int i=nPos+taskId;i<iis.size();i+=nTasks){
-			img=CImg(rep+"im"+i+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
+			img.load(rep+"im"+std::to_string(i)+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
 			iis[i]=SAT(img);
 		}
 	}
@@ -381,7 +381,7 @@ void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& 
 	}
 }
 
-void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos, int clas){
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, int& clas){
 	//TODO
 	std::vector<std::thread> threads;
 	
@@ -404,31 +404,32 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 	
 }
 
-std::vector<double> boost(std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){//OK
+std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats){//OK
 	std::vector<double> weights(tables.size(),1.0/tables.size());
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error=0,alfak;
+	int N=tables.size()/5;
 
 	for(int k=0;k<N;k++){
-		clas=chooseClasf(error,classf);
+		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);
 		alfak=log((1-error)/error)/2;
 		f[clas]+=alfak;
-		updateWeights(weights,alfak,classf[clas],tables, nTasks);
+		parUpdateWeights(weights,alfak,classf[clas],tables, nTasks,nPos,clas);
 	}
 	return f;
 }
 
-int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){//OK
+int F(std::vector<double>& alfa, std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){//OK
 	double fNx=0,f=0,w=0,x;
 	int h;
 
-	
-	for(int i=0;i<weights.size();i++){
-		w=weights[i];
+	for(int i=0;i<feats.size();i++){
+		w=alfa[i];
+
 		if(w){
 			f+=w;
-			x=calcFeat(tables[i],feats[i]);
+			x=calcFeat(sat,feats[i]);
 			h=classf[i].calc(x);
 			fNx+=w*h;
 		}
@@ -440,10 +441,10 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 		return -1;
 }
 
-void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<features>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
 	for(int i=taskId;i<sats.size();i+=nTasks){
 		if(i<nPos){
-			if(F(weights,classf,sats[i],theta)<0)
+			if(F(weights,feats,classf,sats[i],theta)<0)
 				fauxNP[0]++;
 		}
 		else{
@@ -453,13 +454,13 @@ void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::ve
 	}
 }
 
-std::vector<long> test(int& nTasks, std::vector<double>& weights, int& nPos,
+std::vector<long> test(int& nTasks, std::vector<double>& weights, std::vector<feature>& feats, int& nPos,
 		std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
 	std::vector<std::thread> threads;
 	std::vector<std::vector<long>> fauxNP(nTasks,std::vector<long>(2,0));
 
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(parF,nTasks,i,nPos,fauxNP[i],weights,classf,sats,theta));
+		threads.push_back(std::thread(parF,nTasks,i,nPos,fauxNP[i],weights,feats,classf,sats,theta));
 
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();

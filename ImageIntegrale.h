@@ -54,9 +54,11 @@ void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>
 
 
 //Q2.2
-bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<long>>& sat);
+std::vector<double> boost(int& nTasks, int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats);
 
-int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
+void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
+std::vector<classifier>& classf, std::vector<double>& weights,
+std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
 
 int parChooseClasf(int& nTasks, int& nPos, double& error,int ind, 
 std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
@@ -64,17 +66,17 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 
 void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats, int clas);
 
-void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos, int clas);
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, int& clas);
 
 std::vector<double> boost();
 
 //Q3.1
 
-int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
+int F(std::vector<double>& alfa, std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
 
-void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<features>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
 
-std::vector<long> test(int& nTasks, std::vector<double>& weights, int& nPos,
+std::vector<long> test(int& nTasks, std::vector<double>& weights, std::vector<feature>& feats, int& nPos,
 		std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
 
 //TODO
@@ -89,6 +91,11 @@ std::vector<long> test(int& nTasks, std::vector<double>& weights, int& nPos,
  * chooseClasf (& par)
  * boost
  * Main
+ *
+ * Check:
+ *
+ *
+ *
  */
 
 
