@@ -2,6 +2,7 @@
 #define IMAGEINTEGRALEH
 
 #include <vector>
+#include <thread>
 #include "CImg.h"
 
 
@@ -22,41 +23,56 @@ std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img);    //Su
 
 //Q1.2
 class feature{
+public:
 	int x,y,w,h;
 	char type;
 
-	feature();
+	feature(int,int,int,int,char);
 };
 
-long calcFeat(std::vector<std::vector<long>> sat, feature f);
+long calcFeat(std::vector<std::vector<long>>& sat, feature& f);
 
-void featVect(std::vector<feature>& feats, char type,int wMax, int hMax);
+void featVect(std::vector<feature>& feats, char type,int& wMax, int& hMax);
 
-std::vector<feature> distFeat(int widht, int height);
+std::vector<feature> distFeat(int& widht, int& height);
 
 //Q2.1
 class classifier{
+public:
 	double w1,w2;
-	classifier(double,double);
+	classifier();
+	int calc(double);
 };
 
 std::vector<std::vector<std::vector<long> > > distII();
 
-void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats );
+void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats );
 
-void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats );
+void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats);
 
 
 //Q2.2
-bool error(classifier c, bool clas,feature feat,std::vector<std::vector<long>> sat);
+bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<long>>& sat);
 
-void chooseClasf(int& clas,double& error);
+int chooseClasf(double& error,std::vector<classifier>& classf);
 
-void boost();
+void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks);
 
-int F(std::vector<double>weights,std::vector<classifier> classf, std::vector<std::vector<long>>sat,double theta);
+std::vector<double> boost();
 
+int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
 
+//TODO
+/*fazer:
+ * IntegralImage dist
+ * train
+ * chooseClasf
+ * updateWeights
+ * MAIN
+ *
+ * conferir:
+ * calcFeat
+ */
 
 
 #endif

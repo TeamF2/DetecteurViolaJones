@@ -105,7 +105,7 @@ void printData(std::vector<std::vector<double> >& data) {
 }
 
 //Q1.1
-std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//summed area table
+std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//OK
     using namespace cimg_library;
     std::vector<std::vector<long>> sat;
     std::vector<long> row;
@@ -119,14 +119,16 @@ std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//summed
         row.push_back(init);
     }
 
+    sat.push_back(row);
     row.clear();
     it=sat.begin();
     for (int x=1; x<img.width(); x++,sat.push_back(row),it++,row.clear()) {
-        // iterating through: it,x-> rows; i,y->columns in current row; j->columns previous row
+        // iterating through: it,x-> rows; i,y->columns in current row; j->columns in previous row
        
-        //initialization
+        //row initialization
         j=it->begin();
-        row.push_back( *j++ + img(x,0,0));
+        row.push_back( *j + img(x,0,0));
+        j++;
         i=row.begin();
         
         //column iteration
@@ -147,7 +149,7 @@ class feature{
 	}
 };
 
-long calcFeat(std::vector<std::vector<long>> sat, feature f){
+long calcFeat(std::vector<std::vector<long>>& sat, feature& f){////TODO: conferir
 	switch(f.type){
 	case 'a':
 		return 2*sat[f.x+f.w/2][f.y]-2*sat[f.x+f.w/2][f.y+f.h]-sat[f.x][f.y]+sat[f.x][f.y+f.h]-sat[f.x+f.w][f.y]+sat[f.x+f.w][f.y+f.h];
@@ -155,16 +157,16 @@ long calcFeat(std::vector<std::vector<long>> sat, feature f){
 	case 'b':
 		return 2*sat[f.x+f.w][f.y+f.h/2]-2*sat[f.x][f.y+f.h/2]+sat[f.x][f.y]+sat[f.x][f.y+f.h]-sat[f.x+f.w][f.y]-sat[f.x+f.w][f.y+f.h];
 
-	case 'c': //////////TODO
+	case 'c':
 		return -sat[f.x][f.y]+sat[f.x][f.y+f.h]+sat[f.x+f.w][f.y]-sat[f.x+f.w][f.y+f.h]+2*sat[f.x+f.w/3.0][f.y]-2*sat[f.x+f.w/3.0][f.y+f.h]-2*sat[f.x+2*f.w/3.0][f.y]+2*sat[f.x+2*f.w/3.0][f.y+f.h];
 
-	case 'd':///////////TODO
+	case 'd':
 		return 2*(sat[f.x+f.w/2][f.y]+sat[f.x+f.w/2][f.y+f.h]+sat[f.x][f.y+f.h/2]+sat[f.x+f.w][f.y+f.h/2])-4*sat[f.x+f.w/2][f.y+f.h/2]-sat[f.x][f.y]-sat[f.x+f.w][f.y+f.h]-sat[f.x+f.w][f.y]-sat[f.x][f.y+f.h];
 	}
 	return 0;
 }
 
-void featVect(std::vector<feature>& feats, char type,int wMax, int hMax){
+void featVect(std::vector<feature>& feats, char type,int& wMax, int& hMax){//OK
 	int wMin,hMin, wInc,hInc;
 	switch(type){
 	case 'a':
@@ -201,7 +203,7 @@ void featVect(std::vector<feature>& feats, char type,int wMax, int hMax){
 	}
 }
 
-std::vector<feature> distFeat(int widht, int height){
+std::vector<feature> distFeat(int& widht, int& height){//OK
 	std::vector<feature> fA,fB,fC,fD;
 
 	std::thread t1(featVect,fA,'a',width,height);
@@ -223,9 +225,16 @@ std::vector<feature> distFeat(int widht, int height){
 
 //Q2.1
 class classifier{
-	classifier(double ww1,double ww2){
-		w1=ww1;
-		w2=ww2;
+	classifier(){
+		w1=1;
+		w2=0;
+	}
+
+	int calc(double x){
+		if(w1*x+w2>=0)
+			return 1;
+		else
+			return -1;
 	}
 };
 
@@ -234,26 +243,20 @@ std::vector<std::vector<std::vector<long> > > distII(){
 
 }
 
-void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats ){
+void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){///TODO
 	srand(taskId);
-	double r,h.xki;
-	int rr,c;
-	double eps=0.3; //0<eps<=1
-	int K=tables.size()/5;
+	double r,xki;
+	int rr,c,h;
+	double eps=0.3; //0<eps<=1   /////////TODO
+	int K=tables.size()/5;		///////////TODO
 
-	for(int i=taskId;i<tables.size());i+=nTasks){
-		classf[i].w1=1;
-		classf[i].w2=0;
-
+	for(int i=taskId;i<feats.size();i+=nTasks){
 		for(int k=0;k<K;k++){
 			r=srand()/RAND_MAX;
 			rr=((int)r*tables.size()-1);
 
-			xki=calcFeat(tables[i],feats[i]);
-			if(classf[i].w1*xki+classf[i].w2>=0)
-				h=1;
-			else
-				h=-1;
+			xki=calcFeat(tables[rr],feats[i]);
+			h=classf[i].calc(xki);
 
 			if(rr<nPos)
 				c=1;
@@ -266,7 +269,7 @@ void train(int nTasks, int taskId,int nPos, std::vector<std::vector<std::vector<
 	}
 }
 
-void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> tables, std::vector<classifier> classf, std::vector<feature> feats ){
+void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){//OK
 	std::vector<std::thread> threads;
 	for(int i=0;i<nTasks;i++)
 		threads.push_back(std::thread(train,nTasks,i,nPos,tables,classf,feats));
@@ -277,43 +280,43 @@ void parTrain(int nTasks,int nPos, std::vector<std::vector<std::vector<long>>> t
 
 
 //Q2.2
-bool error(classifier c, bool clas,feature feat,std::vector<std::vector<long>> sat){
-	return c.w1*calcFeat(sat,feat)+c.w2>=0 ;
+bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long>>& sat){ ////OK
+	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
-void chooseClasf(int& clas,double& error){
+int chooseClasf(double& error,std::vector<classifier>& classf){
 	//TODO
 
 }
 
-void boost(){
-	std::vector<double> weights(nImages,1/nImages);
-	std::vector<double> f(classf.size(),0);
-	int N=nImages;
-	int clas=0;
-	double error,alfak;
-
-	for(int k=0;k<N;k++){
-		chooseClasf(clas,error);
-		alfak=log((1-error)/error);
-		f[clas]+=alfak;
-		updateWeights(weights,f,alfak);
-	}
+void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){
+	//TODO
 }
 
-int F(std::vector<double>weights,std::vector<classifier> classf, std::vector<std::vector<long>>sat,double theta){
+std::vector<double> boost(std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){//OK
+	std::vector<double> weights(tables.size(),1.0/tables.size());
+	std::vector<double> f(classf.size(),0);
+	int clas=0;
+	double error=0,alfak;
+
+	for(int k=0;k<N;k++){
+		clas=chooseClasf(error,classf);
+		alfak=log((1-error)/error)/2;
+		f[clas]+=alfak;
+		updateWeights(weights,alfak,classf[clas],tables, nTasks);
+	}
+	return f;
+}
+
+int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){//OK
 	double fNx=0,f=0,w=0,x;
 	int h;
 	for(int i=0;i<weights.size();i++){
 		w=weights[i];
 		if(w){
 			f+=w;
-
 			x=calcFeat(tables[i],feats[i]);
-			if(classf[i].w1*x+classf[i].w2>=0)
-				h=1;
-			else
-				h=-1;
+			h=classf[i].calc(x);
 			fNx+=w*h;
 		}
 	}

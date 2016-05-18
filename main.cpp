@@ -1,34 +1,42 @@
 #include <iostream>
 #include <vector>
+#include <thread>
 #include <cstdlib>
 #include "CImg.h"
 #include "ImageIntegrale.h"
 
-int main(void) {
+
+int main(int argc, char** argv) {
 	using namespace std;
 	using namespace cimg_library;
+
+	std::vector<std::vector<std::vector<long> > > iiTrain,iiValidation,iiTest;
 	std::vector<feature> feats;
+	std::vector<double> clasFinal;
 	int width,height;
+	int trainPos,validationPos;
+	int nTasks=std::thread::hardware_concurrency();
 
-
-
+	if(argc==2)
+		nTasks=argv[1];
 
 	//1-Define features
 	feats=distFeat(width,height);
 	
 	//2-Read "Train" repertory images
-
+	iiTrain=distII();
 
 	//3-Create weak classifiers
-
+	std::vector<classifier> classf(feats.size(),new classifier());
+	parTrain(nTasks,trainPos,iiTrain,classf,feats);
 
 	//4-Read "Validation" repertory images
-
+	iiValidation=distII();
 
 	//5-Boost weak classifiers
+	clasFinal=boost(classf,iiValidation,nTasks);
 
-
-	//6-Vary theta (-1<theta<1)
+	//6-Vary theta (-1<=theta<=1)
 
 
 	//7-
