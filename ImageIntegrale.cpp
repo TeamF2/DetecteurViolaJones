@@ -139,15 +139,14 @@ std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img){//OK
 }
 
 //Q1.2
-class feature{
-	feature(int xx, int yy, int ww,int hh,char c){
-		x=xx;
-		y=yy;
-		w=ww;
-		h=hh;
-		type=c;
-	}
-};
+
+feature::feature(int xx, int yy, int ww,int hh,char c){ // fix definition
+	x=xx;
+	y=yy;
+	w=ww;
+	h=hh;
+	type=c;
+}
 
 long calcFeat(std::vector<std::vector<long>>& sat, feature& f){////TODO: conferir
 	switch(f.type){
@@ -197,13 +196,13 @@ void featVect(std::vector<feature>& feats, char type,int& wMax, int& hMax){//OK
 		for(int h=hMin;h<hMax;h+=hInc){
 			for(int x=0;x<wMax-w;x+=4){
 				for(int y=0;y<hMax-h;y+=4)
-					feats.push_back(new feature(x,y,w,h,type));
+					feats.push_back(feature(x,y,w,h,type)); // fix new gives a pointer
 			}
 		}
 	}
 }
 
-std::vector<feature> distFeat(int& widht, int& height){//OK
+std::vector<feature> distFeat(int& width, int& height){//OK // fix name widht -> width
 	std::vector<feature> fA,fB,fC,fD;
 
 	std::thread t1(featVect,fA,'a',width,height);
@@ -224,31 +223,30 @@ std::vector<feature> distFeat(int& widht, int& height){//OK
 
 
 //Q2.1
-class classifier{
-	classifier(){
-		w1=1;
-		w2=0;
-	}
+classifier::classifier(){ //fix definition
+	w1=1;
+	w2=0;
+}
 
-	int calc(double x){
-		if(w1*x+w2>=0)
-			return 1;
-		else
-			return -1;
-	}
-};
+int classifier::calc(double x){ // fix definition
+	if(w1*x+w2>=0)
+		return 1;
+	else
+		return -1;
+}
 
 void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep){////TODO conferir
+	using namespace cimg_library; // added to fix CImg call
 	CImg<long> img;
 	if(pos){
 		for(int i=taskId;i<nPos;i+=nTasks){
-			img=CImg(rep+"im"+i+".jpg");
+			img=CImg(rep+"im"+i+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
 			iis[i]=SAT(img);
 		}
 	}
 	else{
 		for(int i=nPos+taskId;i<iis.size();i+=nTasks){
-			img=CImg(rep+"im"+i+".jpg");
+			img=CImg(rep+"im"+i+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
 			iis[i]=SAT(img);
 		}
 	}
@@ -282,7 +280,7 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 
 	for(int i=taskId;i<feats.size();i+=nTasks){
 		for(int k=0;k<K;k++){
-			r=srand()/RAND_MAX;
+			r=rand()/RAND_MAX; // fix srand() -> rand()
 			rr=((int)r*tables.size()-1);
 
 			xki=calcFeat(tables[rr],feats[i]);

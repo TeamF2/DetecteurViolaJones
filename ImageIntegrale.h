@@ -34,7 +34,7 @@ long calcFeat(std::vector<std::vector<long>>& sat, feature& f);
 
 void featVect(std::vector<feature>& feats, char type,int& wMax, int& hMax);
 
-std::vector<feature> distFeat(int& widht, int& height);
+std::vector<feature> distFeat(int& width, int& height);
 
 //Q2.1
 class classifier{
