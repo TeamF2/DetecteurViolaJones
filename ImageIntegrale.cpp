@@ -233,6 +233,7 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 	std::stringstream ss;
 	if(pos){
 		for(int i=taskId;i<nPos;i+=nTasks){
+			ss.str(std::string());
 			ss<<rep<<"im"<<i<<".jpg";
 			img.load(ss.str().c_str());
 			iis[i]=SAT(img);
@@ -240,7 +241,8 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 	}
 	else{
 		for(int i=nPos+taskId;i<iis.size();i+=nTasks){
-			ss<<rep<<"im"<<i<<".jpg";
+			ss.str(std::string());
+			ss<<rep<<"im"<<i-nPos<<".jpg";
 			img.load(ss.str().c_str());
 			iis[i]=SAT(img);
 		}
