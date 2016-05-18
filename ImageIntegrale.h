@@ -46,7 +46,7 @@ public:
 
 void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep);
 
-std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::string rep,int& nTasks);
+std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int& nNeg, std::string rep);
 
 void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats );
 
@@ -66,7 +66,6 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 
 //TODO
 /*fazer:
- * chooseClasf
  * updateWeights
  * MAIN
  *
@@ -74,6 +73,7 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
  * distII (readImgs)
  * calcFeat
  * train
+ * chooseClasf
  */
 
 

@@ -13,8 +13,9 @@ int main(int argc, char** argv) {
 	std::vector<std::vector<std::vector<long> > > iiTrain,iiValidation,iiTest;
 	std::vector<feature> feats;
 	std::vector<double> clasFinal;
+	std::string repository="ProjSrc/"
 	int width,height;
-	int trainPos,validationPos;
+	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415;
 	int nTasks=std::thread::hardware_concurrency();
 
 	if(argc==2)
@@ -23,15 +24,15 @@ int main(int argc, char** argv) {
 	//1-Define features
 	feats=distFeat(width,height);
 	
-	//2-Read "Train" repertory images
-	iiTrain=distII();
+	//2-Read "Train" (app) repertory images
+	iiTrain=distII(nTasks,trainPos,trainNeg,repository+"app");
 
 	//3-Create weak classifiers
 	std::vector<classifier> classf(feats.size(),new classifier());
 	parTrain(nTasks,trainPos,iiTrain,classf,feats);
 
-	//4-Read "Validation" repertory images
-	iiValidation=distII();
+	//4-Read "Validation" (dev) repertory images
+	iiValidation=distII(nTasks,validationPos,validationNeg,repository+"dev");
 
 	//5-Boost weak classifiers
 	clasFinal=boost(classf,iiValidation,nTasks);
