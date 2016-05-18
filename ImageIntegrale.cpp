@@ -373,31 +373,31 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	return ind;
 }
 
-void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats){
+void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats, int clas){
 	//TODO
 	for(int i = Taskid; i < weights.size(); i+=nTasks)
 	{
-		if(c) weights[i] *= exp(alfak*classf.calc(calcFeat(tables[i],feats[i]))); // Conferir, pas sur...
+		if(c) weights[i] *= exp(alfak*classf.calc(calcFeat(tables[i],feats[clas]))); // Conferir, pas sur...
 	}
 }
 
-void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos){
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos, int clas){
 	//TODO
 	std::vector<std::thread> threads;
 	
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(updateWeights,nTasks,i,weights,alfak,classf,tables, i<Npos));
+		threads.push_back(std::thread(updateWeights,nTasks,i,weights,alfak,classf,tables, i<Npos, clas));
 	
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();
 	
 	double sum = 0; // compute sum to normalise
-	for(int i = 0; i < weights.size(); ++i)
+	for(int i = 0; i < weights.size(); ++i) // can be parallelized
 	{
 		sum+= weights[i];
 	}
 	
-	for(size_t i = 0; i < weights.size(); ++i)
+	for(int i = 0; i < weights.size(); ++i)
 	{ // normalising weigths
 		weights[i] /= sum;
 	}
