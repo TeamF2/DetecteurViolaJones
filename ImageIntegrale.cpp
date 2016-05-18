@@ -273,7 +273,7 @@ std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::s
 	return ii;
 }
 
-void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){///TODO
+void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){///TODO: Conferir o eps e o K
 	srand(taskId);
 	double r,xki;
 	int rr,c,h;
@@ -314,9 +314,35 @@ bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long
 	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
-int chooseClasf(double& error,std::vector<classifier>& classf){
+int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	//TODO
-
+	// Added arguments:
+	// weights, c, feats, tables
+	double locerr = 0;
+	int clas = 0;
+	
+	for(int i = 0; i < classf.size(); ++i)
+	{
+		// Initialize the weighted error
+		for(int j = 0; j < weights.size(); ++j)
+		{
+			locerr += weights[j]* error(classf[i], c[i], feats[i], tables[j]);
+		}
+		
+		
+		if(i==0) { // Initialize error
+			error = locerr;
+			clas = 0;
+		} else if(error < locerr) { // Take the min
+			error = locerr;
+			clas = i;			
+		}
+		
+		// reinit
+		locerr = 0;
+	}
+	
+	return clas;
 }
 
 void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){

@@ -56,7 +56,7 @@ void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>
 //Q2.2+
 bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<long>>& sat);
 
-int chooseClasf(double& error,std::vector<classifier>& classf);
+int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
 
 void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks);
 
