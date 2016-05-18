@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	
 	// Show Integral Image dimentions
 	std::cout << "Image dimentions"<< std::endl; 
-	std::cout << sat.size()<< "x"<< sat[0].size << std::endl;
+	std::cout << sat.size()<< "x"<< sat[0].size() << std::endl;
 	
 	// Print the Integral Image
 	printData(sat);

@@ -17,7 +17,7 @@ std::vector<double> ReadData(const char *filepath);
 std::vector<std::vector<double> > DataToMatrix(const char *filepath);
 
 // Print a vector of vectors
-void printData(std::vector<std::vector<double> >& data);
+void printData(std::vector<std::vector<long> >& data);
 
 //Q1.1
 std::vector<std::vector<long>> SAT(const cimg_library::CImg<long>& img);    //Summed Area Table
@@ -45,7 +45,7 @@ public:
 	int calc(double);
 };
 
-void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep);
+void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string rep);
 
 std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int& nNeg, std::string rep);
 
@@ -67,7 +67,7 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 
 void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats, int clas);
 
-void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, int& clas);
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, std::vector<feature>& feats, int& clas);
 
 std::vector<double> boost();
 
