@@ -314,14 +314,17 @@ bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long
 	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
-int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
+void chooseClasf(int& nTasks, int taskId, int& nPos, double& error,int ind, 
+std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
+std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	//TODO
 	// Added arguments:
 	// weights, c, feats, tables
+	// Modifies error and ind to the
+	// min err and his index
 	double locerr = 0;
-	int clas = 0;
 	
-	for(int i = 0; i < classf.size(); ++i)
+	for(int i = taskId; i < classf.size(); i+=nTasks)
 	{
 		// Initialize the weighted error
 		for(int j = 0; j < weights.size(); ++j)
@@ -332,17 +335,43 @@ int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<doub
 		
 		if(i==0) { // Initialize error
 			error = locerr;
-			clas = 0;
+			ind = 0;
 		} else if(error < locerr) { // Take the min
 			error = locerr;
-			clas = i;			
+			ind = i;			
 		}
 		
 		// reinit
 		locerr = 0;
 	}
+}
+
+int parChooseClasf(int& nTasks, int& nPos, double& error,int ind, 
+std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
+std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables) {
 	
-	return clas;
+	std::vector<std::thread> threads;
+	std::vector<double> err(nTasks); // vector of min err for every task
+	std::vector<int> indices(nTasks); // Vector of argmin (error)
+	
+	for(int i=0;i<nTasks;i++)
+		threads.push_back(std::thread(chooseClasf,nTasks,i,nPos,err[i],indices[i],classf,weights,c,feats,tables));
+
+	for(int i=0;i<nTasks;i++)
+		threads[i].join();
+	
+	for(int i = 0; i < nTasks; ++i)
+	{
+		if(i==0) { // Init
+			error = err[i];
+			ind = indices[i];
+		} else if(error < err[i]) { // Take the min
+			error = err[i]; // Update error
+			ind = indices[i]; // Update argmin(error)
+		}
+	}
+	
+	return ind;
 }
 
 void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks){

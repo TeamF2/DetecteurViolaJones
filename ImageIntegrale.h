@@ -58,6 +58,10 @@ bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<l
 
 int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
 
+int parChooseClasf(int& nTasks, int& nPos, double& error,int ind, 
+std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
+std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
+
 void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks);
 
 std::vector<double> boost();
