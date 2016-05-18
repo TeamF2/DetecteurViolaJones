@@ -16,7 +16,7 @@ FLAGS = $(DEFINES)
 ifdef DEBUG
   FLAGS += -g
 else
-  FLAGS += -O3
+  FLAGS += 
 endif
 
 ifeq "$(SETUP)" "sallesinfo "
@@ -76,7 +76,7 @@ main: ImageIntegrale.* main.cpp Makefile
 
 # clean objects and executable
 clean:
-	$(RM) $(OBJS) $(BIN) box_muller cimgvec k_means
+	$(RM) $(OBJS) $(BIN) test_q_1_1 test_q_1_2 main
 
 # restore directory to pristine state
 distclean: clean

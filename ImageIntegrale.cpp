@@ -249,7 +249,7 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 }
 
 
-std::vector<std::vector<std::vector<long> > > distII(int& nPos,int& nNeg, std::string rep,int& nTasks){//TODO conferir
+std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int& nNeg, std::string rep){//TODO conferir
 	std::vector<std::vector<std::vector<long> > > ii(nPos+nNeg); // semicolon fix
 	std::vector<std::thread> pos,neg;
 	for(int i=0;i<nTasks;i++)
