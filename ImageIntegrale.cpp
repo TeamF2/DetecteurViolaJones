@@ -423,7 +423,7 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 	double fNx=0,f=0,w=0,x;
 	int h;
 
-	f
+	
 	for(int i=0;i<weights.size();i++){
 		w=weights[i];
 		if(w){
