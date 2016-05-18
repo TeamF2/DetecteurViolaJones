@@ -62,7 +62,9 @@ int parChooseClasf(int& nTasks, int& nPos, double& error,int ind,
 std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
 
-void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks);
+void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c);
+
+void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int Npos);
 
 std::vector<double> boost();
 
