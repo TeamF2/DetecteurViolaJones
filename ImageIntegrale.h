@@ -72,21 +72,23 @@ std::vector<double> boost();
 
 int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
 
-std::vector<std::vector<double>> test(int& nTasks, std::vector<double>& weights,
-		std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
 
+std::vector<long> test(int& nTasks, std::vector<double>& weights, int& nPos,
+		std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
 
 //TODO
 /*fazer:
- * updateWeights
- * MAIN
+ * q3.2
  *
  * conferir:
+ * updateWeights(par)
  * distII (readImgs)
  * calcFeat
  * train
  * chooseClasf (& par)
  * boost
+ * Main
  */
 
 
