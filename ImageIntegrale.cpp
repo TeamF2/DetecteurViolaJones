@@ -314,8 +314,8 @@ bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long
 	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
-void chooseClasf(int& nTasks, int taskId, int& nPos, double& error,int ind, 
-std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
+void chooseClasf(int& nTasks, int taskId, int& nPos, double& error,int& ind,
+std::vector<classifier>& classf, std::vector<double>& weights,
 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	//TODO
 	// Added arguments:
@@ -329,7 +329,8 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		// Initialize the weighted error
 		for(int j = 0; j < weights.size(); ++j)
 		{
-			locerr += weights[j]* error(classf[i], c[i], feats[i], tables[j]);
+			if(error(classf[i], i<nPos , feats[i], tables[j]))
+				locerr += weights[j];
 		}
 		
 		
@@ -346,16 +347,16 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	}
 }
 
-int parChooseClasf(int& nTasks, int& nPos, double& error,int ind, 
-std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, 
+int parChooseClasf(int& nTasks, int& nPos, double& error,
+std::vector<classifier>& classf, std::vector<double>& weights,
 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables) {
-	
+	int ind=0;
 	std::vector<std::thread> threads;
 	std::vector<double> err(nTasks); // vector of min err for every task
 	std::vector<int> indices(nTasks); // Vector of argmin (error)
 	
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(chooseClasf,nTasks,i,nPos,err[i],indices[i],classf,weights,c,feats,tables));
+		threads.push_back(std::thread(chooseClasf,nTasks,i,nPos,err[i],indices[i],classf,weights,feats,tables));
 
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();

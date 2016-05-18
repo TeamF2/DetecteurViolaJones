@@ -77,7 +77,7 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
  * distII (readImgs)
  * calcFeat
  * train
- * chooseClasf
+ * chooseClasf (& par)
  */
 
 
