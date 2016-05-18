@@ -53,7 +53,7 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats);
 
 
-//Q2.2+
+//Q2.2
 bool error(classifier& classf, bool clas,feature& feat,std::vector<std::vector<long>>& sat);
 
 int chooseClasf(double& error, std::vector<classifier>& classf, std::vector<double>& weights, std::vector<bool>& c, std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables);
@@ -66,7 +66,13 @@ void updateWeights(std::vector<double>& weights,double& alfak,classifier& classf
 
 std::vector<double> boost();
 
+//Q3.1
+
 int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
+
+std::vector<std::vector<double>> test(int& nTasks, std::vector<double>& weights,
+		std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
+
 
 //TODO
 /*fazer:
@@ -78,6 +84,7 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
  * calcFeat
  * train
  * chooseClasf (& par)
+ * boost
  */
 
 

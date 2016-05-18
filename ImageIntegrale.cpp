@@ -395,6 +395,8 @@ std::vector<double> boost(std::vector<classifier>& classf,std::vector<std::vecto
 int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){//OK
 	double fNx=0,f=0,w=0,x;
 	int h;
+
+	f
 	for(int i=0;i<weights.size();i++){
 		w=weights[i];
 		if(w){
@@ -410,5 +412,23 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 	else
 		return -1;
 }
+
+std::vector<std::vector<double>> parF(int& nTasks, int taskId, int& nPos, bool pos, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>>& sat,double theta){
+	std::vector<std::vector<double>> fauxPN(nTasks,\0);
+	std::vector<std::thread> threads;
+		for(int i=0;i<nTasks;i++)
+			threads.push_back(std::thread(f));
+
+		for(int i=0;i<nTasks;i++)
+			threads[i].join();
+
+}
+
+std::vector<std::vector<double>> test(int& nTasks, std::vector<double>& weights,
+		std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){
+
+}
+
+
 
 
