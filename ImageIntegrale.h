@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <thread>
+#include <sstream>
 #include "CImg.h"
 
 

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <sstream>
 #include "CImg.h"
 #include "ImageIntegrale.h"
 #include "math.h"
