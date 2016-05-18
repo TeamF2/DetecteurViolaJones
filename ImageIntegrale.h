@@ -74,7 +74,7 @@ std::vector<double> boost();
 
 int F(std::vector<double>& alfa, std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta);
 
-void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<features>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);
 
 std::vector<long> test(int& nTasks, std::vector<double>& weights, std::vector<feature>& feats, int& nPos,
 		std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta);

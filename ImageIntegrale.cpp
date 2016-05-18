@@ -238,15 +238,18 @@ int classifier::calc(double x){ // fix definition
 void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vector<std::vector<long>>>& iis ,std::string& rep){////TODO conferir
 	using namespace cimg_library; // added to fix CImg call
 	CImg<long> img;
+	std::stringstream ss;
 	if(pos){
 		for(int i=taskId;i<nPos;i+=nTasks){
-			img.load(rep+"im"+std::to_string(i)+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
+			ss<<rep<<"im"<<i<<".jpg";
+			img.load(ss.str());
 			iis[i]=SAT(img);
 		}
 	}
 	else{
 		for(int i=nPos+taskId;i<iis.size();i+=nTasks){
-			img.load(rep+"im"+std::to_string(i)+".jpg"); // error... CImg<long> img=CImg(rep+"im"+i+".jpg");
+			ss<<rep<<"im"<<i<<".jpg";
+			img.load(ss.str());
 			iis[i]=SAT(img);
 		}
 	}
@@ -441,14 +444,14 @@ int F(std::vector<double>& alfa, std::vector<feature>& feats,std::vector<classif
 		return -1;
 }
 
-void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<features>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
 	for(int i=taskId;i<sats.size();i+=nTasks){
 		if(i<nPos){
 			if(F(weights,feats,classf,sats[i],theta)<0)
 				fauxNP[0]++;
 		}
 		else{
-			if(F(weights,classf,sats[i],theta)>0)
+			if(F(weights,feats,classf,sats[i],theta)>0)
 				fauxNP[1]++;
 		}
 	}
