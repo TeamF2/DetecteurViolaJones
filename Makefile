@@ -62,9 +62,9 @@ all:	$(BIN) Makefile
 $(BIN): $(OBJS) $(BIN).cpp Makefile
 	$(CXX) $(FLAGS) $(INCLUDE) -o $(BIN) $(BIN).cpp $(OBJS) $(LIBS)
 
-# rule for exercise 0
-cimgvec: cimgvec.cpp Makefile
-	$(CXX) $(FLAGS) $(INCLUDE) -o $@ $@.cpp $(LIBS)
+# rule for test Q1.1
+test_q_1_1: ImageIntegrale.* test_q_1_1.cpp Makefile
+		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp test_q_1_1.cpp $(LIBS)
 
 # rule for exercise 1
 main: ImageIntegrale.* main.cpp Makefile
