@@ -440,20 +440,36 @@ int F(std::vector<double>& weights,std::vector<classifier>& classf, std::vector<
 		return -1;
 }
 
-std::vector<std::vector<double>> parF(int& nTasks, int taskId, int& nPos, bool pos, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<long>>>& sat,double theta){
-	std::vector<std::vector<double>> fauxPN(nTasks,\0);
-	std::vector<std::thread> threads;
-		for(int i=0;i<nTasks;i++)
-			threads.push_back(std::thread(f));
-
-		for(int i=0;i<nTasks;i++)
-			threads[i].join();
-
+void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
+	for(int i=taskId;i<sats.size();i+=nTasks){
+		if(i<nPos){
+			if(F(weights,classf,sats[i],theta)<0)
+				fauxNP[0]++;
+		}
+		else{
+			if(F(weights,classf,sats[i],theta)>0)
+				fauxNP[1]++;
+		}
+	}
 }
 
-std::vector<std::vector<double>> test(int& nTasks, std::vector<double>& weights,
-		std::vector<classifier>& classf, std::vector<std::vector<long>>& sat,double theta){
+std::vector<long> test(int& nTasks, std::vector<double>& weights, int& nPos,
+		std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
+	std::vector<std::thread> threads;
+	std::vector<std::vector<long>> fauxNP(nTasks,std::vector<long>(2,0));
 
+	for(int i=0;i<nTasks;i++)
+		threads.push_back(std::thread(parF,nTasks,i,nPos,fauxNP[i],weights,classf,sats,theta));
+
+	for(int i=0;i<nTasks;i++)
+		threads[i].join();
+
+	for(int i=1;i<nTasks;i++){
+		fauxNP[0][0]+=fauxNP[i][0];
+		fauxNP[0][1]+=fauxNP[i][1];
+	}
+
+	return fauxNP[0];
 }
 
 
