@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 	cout<<"Printing strong classifier weights:"<<endl;
 	for(int i=0;i<clasFinal.size();i++)
 		if(clasFinal[i])
-			cout<<clasFinal[i];
+			cout<<clasFinal[i]<<" ; ";
 	cout<<endl;
 
 
@@ -73,8 +73,8 @@ int main(int argc, char** argv) {
 	cout << "Let's print the results!" << endl;
 	//print results
 	int i;
-	for(double theta=-1,i=0;theta<=1;theta+=0.1,i++)
-		cout<<"Theta: "<<theta<<", f+: "<<(double)fauxNP[i][0]/(double)testPos<<", f-: "<<(double)fauxNP[i][1]/(double)testNeg<<endl;
+	for(double theta=-1,i=0;theta<=-0.99;theta+=0.001,i++)
+		cout<<"Theta: "<<theta<<", f-: "<<fauxNP[i][0]<<", f+: "<<fauxNP[i][1]<<endl;
 	
 
 	return 0;

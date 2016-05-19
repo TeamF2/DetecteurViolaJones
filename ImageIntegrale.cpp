@@ -462,12 +462,12 @@ int F(std::vector<double>& alfa, std::vector<feature>& feats,std::vector<classif
 void parF(int& nTasks, int taskId, int& nPos, std::vector<long>& fauxNP, std::vector<double>& weights,std::vector<feature>& feats,std::vector<classifier>& classf, std::vector<std::vector<std::vector<long>>>& sats,double theta){
 	for(int i=taskId;i<sats.size();i+=nTasks){
 		if(i<nPos){
-			if(F(weights,feats,classf,sats[i],theta)<0)
-				fauxNP[0]++;
+			if(F(weights,feats,classf,sats[i],theta)==-1)
+				fauxNP[0]++;//fauxNP[0] = n false negatives
 		}
 		else{
-			if(F(weights,feats,classf,sats[i],theta)>0)
-				fauxNP[1]++;
+			if(F(weights,feats,classf,sats[i],theta)==1)
+				fauxNP[1]++;//fauxNP[1] = n false positives
 		}
 	}
 }
