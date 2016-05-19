@@ -16,29 +16,33 @@ int main(int argc, char** argv) {
 	std::vector<feature> feats;
 	std::vector<double> clasFinal;
 	std::string repository="ProjSrc/";
-	int width,height;
+	int width=112,height=92;
 	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415,testPos=818,testNeg=1000;
 	int nTasks=std::thread::hardware_concurrency();
 
 	if(argc==2)
 		nTasks=std::atoi(argv[1]);
 
+	cout << "Using "<<nTasks<<" threads." << endl;
+
+
 	//1-Define features
 	feats=distFeat(width,height);
-	cout << "We have features!" << endl;
+	cout << "We have "<<feats.size()<<" features!" << endl;
 	
 	//2-Read "Train" (app) repository images
 	iiTrain=distII(nTasks,trainPos,trainNeg,repository+"app");
-	cout << "We loaded the train images!" << endl;
+	cout << "We loaded the "<<iiTrain.size()<<" train images!" << endl;
 
 	//3-Create weak classifiers
-	std::vector<classifier> classf(feats.size(), classifier());
+	std::vector<classifier> classf(feats.size(), classifier::classifier());
+	cout << "Created classifiers vector!" << endl;
 	parTrain(nTasks,trainPos,iiTrain,classf,feats);
-	cout << "We have weak classifiers!" << endl;
+	cout << "We have "<<classf.size()<<" weak classifiers!" << endl;
 
 	//4-Read "Validation" (dev) repository images
 	iiValidation=distII(nTasks,validationPos,validationNeg,repository+"dev");
-	cout << "We loaded the validation images!" << endl;
+	cout << "We loaded the "<<iiValidation.size()<<" validation images!" << endl;
 
 	//5-Boost weak classifiers
 	clasFinal=boost(nTasks, validationPos, classf,iiValidation, feats);
@@ -46,7 +50,7 @@ int main(int argc, char** argv) {
 
 	//6-read "Test" (test) repository images
 	iiTest=distII(nTasks,testPos,testNeg,repository+"test");
-	cout << "We test the images!" << endl;
+	cout << "We loaded the "<<iiTest.size()<<" test the images!" << endl;
 
 
 	//7-Vary theta (-1<=theta<=1)

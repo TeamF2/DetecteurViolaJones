@@ -402,15 +402,16 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 }
 
 std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats){//OK
-	std::vector<double> weights(tables.size(),1.0/tables.size());
+	double w0=1.0/tables.size();
+	std::vector<double> weights(tables.size(),w0);
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error=0,alfak;
 	int N=tables.size()/5;
 
 	for(int k=0;k<N;k++){
-		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);
-		alfak=log((1-error)/error)/2;
+		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);	///check
+		alfak=log((1-error)/error)/2;	///check
 		f[clas]+=alfak;
 		parUpdateWeights(weights,alfak,classf[clas],tables, nTasks,nPos,feats,clas);
 	}
