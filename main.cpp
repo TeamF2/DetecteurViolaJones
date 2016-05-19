@@ -19,6 +19,7 @@ int main(int argc, char** argv) {
 	int width=112,height=92;
 	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415,testPos=818,testNeg=4415;
 	int nTasks=std::thread::hardware_concurrency();
+	double eps=0.5;
 
 	if(argc==2)
 		nTasks=std::atoi(argv[1]);
@@ -38,7 +39,7 @@ int main(int argc, char** argv) {
 	std::vector<classifier> classf(feats.size(), classifier::classifier());
 	cout << "Created classifiers vector!" << endl;
 
-	parTrain(nTasks,trainPos,iiTrain,classf,feats);
+	parTrain(nTasks,trainPos,iiTrain,classf,feats,eps);
 	cout << "We have the "<<classf.size()<<" weak classifiers!" << endl;
 
 	//4-Read "Validation" (dev) repository images

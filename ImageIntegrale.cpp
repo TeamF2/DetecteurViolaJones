@@ -269,12 +269,13 @@ std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int&
 	return ii;
 }
 
-void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){///TODO: Conferir o eps e o K
+void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
+		std::vector<classifier>& classf, std::vector<feature>& feats, double& eps ){///TODO: Conferir o eps e o K
 	srand(taskId);
 	double r,xki;
 	int rr,c,h;
-	double eps=0.6; //0<eps<=1   /////////TODO
-	int K=tables.size()/5;		///////////TODO
+	int K=tables.size()/5;		///////////Paramet
+
 
 	for(int i=taskId;i<feats.size();i+=nTasks){
 		for(int k=0;k<K;k++){
@@ -295,10 +296,11 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 	}
 }
 
-void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats ){//OK
+void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
+		std::vector<classifier>& classf, std::vector<feature>& feats , double& eps){//OK
 	std::vector<std::thread> threads;
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(train,std::ref(nTasks),i,std::ref(nPos),std::ref(tables),std::ref(classf),std::ref(feats)));
+		threads.push_back(std::thread(train,std::ref(nTasks),i,std::ref(nPos),std::ref(tables),std::ref(classf),std::ref(feats),std::ref(eps)));
 
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();
@@ -423,7 +425,7 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error,alfak;
-	int N=9;
+	int N=9;  ////Paramet
 	std::cout << "Boost steps:" << std::endl;
 	for(int k=0;k<N;k++){
 		std::cout << "Step : " << k << "/" << N << std::endl;

@@ -49,9 +49,11 @@ void readImgs(int& nTasks, int taskId,bool pos,int& nPos, std::vector<std::vecto
 
 std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int& nNeg, std::string rep);
 
-void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats );
+void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
+		std::vector<classifier>& classf, std::vector<feature>& feats, double& eps );
 
-void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables, std::vector<classifier>& classf, std::vector<feature>& feats);
+void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
+		std::vector<classifier>& classf, std::vector<feature>& feats, double& eps);
 
 
 //Q2.2
