@@ -187,8 +187,9 @@ void featVect(std::vector<feature>& feats, char type,int& wMax, int& hMax){//OK
 	for(int w=wMin;w<wMax;w+=wInc){
 		for(int h=hMin;h<hMax;h+=hInc){
 			for(int x=0;x<wMax-w;x+=4){
-				for(int y=0;y<hMax-h;y+=4)
+				for(int y=0;y<hMax-h;y+=4){
 					feats.push_back(feature(x,y,w,h,type)); // fix new gives a pointer
+				}
 			}
 		}
 	}
@@ -272,8 +273,8 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 	srand(taskId);
 	double r,xki;
 	int rr,c,h;
-	double eps=0.3; //0<eps<=1   /////////TODO
-	int K=tables.size()/5;		///////////TODO
+	double eps=0.6; //0<eps<=1   /////////TODO
+	int K=1;		///////////TODO
 
 	for(int i=taskId;i<feats.size();i+=nTasks){
 		for(int k=0;k<K;k++){
@@ -305,8 +306,8 @@ void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>
 
 
 //Q2.2
-bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long>>& sat){ ////OK
-	return classf.calc(calcFeat(sat,feat))!=(2*c-1) ;
+bool error(classifier& classf, int c,feature& feat,std::vector<std::vector<long>>& sat){ ////OK
+	return classf.calc(calcFeat(sat,feat))!=c ;
 }
 
 void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
@@ -374,22 +375,24 @@ void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& 
 	//TODO
 	for(int i = Taskid; i < weights.size(); i+=nTasks)
 	{//changed
-		if(i<nPos)
-			weights[i] *= exp(-alfak*classf.calc(calcFeat(tables[i],feats[clas]))); // Conferir, pas sur...
-		else
-			weights[i] *= exp(alfak*classf.calc(calcFeat(tables[i],feats[clas])));
+		if(i<nPos){
+			if(error(classf,1,feats[clas],tables[i]))
+				weights[i] *= exp(alfak);
+			else
+				weights[i] *= exp(-alfak);
+		}
+		else{
+			if(error(classf,-1,feats[clas],tables[i]))
+				weights[i] *= exp(alfak);
+			else
+				weights[i] *= exp(-alfak);
+		}
 	}
 }
 
 void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int& nTasks, int& Npos, std::vector<feature>& feats, int& clas){
 	//TODO
 	std::vector<std::thread> threads;
-	
-	for(int i = 0; i < weights.size(); ++i)
-		{ // normalising weigths
-			std::cout<<weights[i]<<",";
-		}
-		std::cout<<std::endl;
 
 	for(int i=0;i<nTasks;i++)
 		threads.push_back(std::thread(updateWeights, std::ref(nTasks),i,std::ref(weights),std::ref(alfak),std::ref(classf), std::ref(tables), Npos, std::ref(feats), clas));
@@ -406,9 +409,7 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 	for(int i = 0; i < weights.size(); ++i)
 	{ // normalising weigths
 		weights[i] /= sum;
-		std::cout<<weights[i]<<",";
 	}
-	std::cout<<std::endl;
 }
 
 std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats){//OK
@@ -421,10 +422,7 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	for(int k=0;k<N;k++){
 		std::cout << k<<std::endl;
 		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);	///check
-		if(!error)
-			std::cout<<"In boost(): Error=0, dividing by "<<error<< "!"<<std::endl;
-		else
-			std::cout<<"Error:"<<error<<std::endl;
+		std::cout<<"Error:"<<error<<std::endl;
 		std::cout<<"Index: "<<clas<<std::endl;
 		alfak=log((1-error)/error)/2;	///check
 		std::cout<<"AlfaK: "<<alfak<<std::endl;

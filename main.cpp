@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 	std::vector<double> clasFinal;
 	std::string repository="ProjSrc/";
 	int width=112,height=92;
-	int trainPos=818,trainNeg=4415,validationPos=400,validationNeg=400,testPos=818,testNeg=4415;
+	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415,testPos=818,testNeg=4415;
 	int nTasks=std::thread::hardware_concurrency();
 
 	if(argc==2)
@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
 	//3-Create weak classifiers
 	std::vector<classifier> classf(feats.size(), classifier::classifier());
 	cout << "Created classifiers vector!" << endl;
+
 	parTrain(nTasks,trainPos,iiTrain,classf,feats);
 	cout << "We have the "<<classf.size()<<" weak classifiers!" << endl;
 

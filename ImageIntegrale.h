@@ -55,6 +55,8 @@ void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>
 
 
 //Q2.2
+bool error(classifier& classf, int c,feature& feat,std::vector<std::vector<long>>& sat);
+
 std::vector<double> boost(int& nTasks, int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats);
 
 void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
