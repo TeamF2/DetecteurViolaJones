@@ -306,7 +306,7 @@ void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>
 
 //Q2.2
 bool error(classifier& classf, bool c,feature& feat,std::vector<std::vector<long>>& sat){ ////OK
-	return classf.calc(calcFeat(sat,feat))!=c ;
+	return classf.calc(calcFeat(sat,feat))!=(2*c-1) ;
 }
 
 void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
@@ -329,9 +329,9 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		}
 		
 		
-		if(i==0) { // Initialize error
+		if(i==taskId) { // Initialize error  //changed i==0 to i==taskId;;  ind=0 to ind=taskId
 			currerr = locerr;
-			ind = 0;
+			ind = taskId;
 		} else if(currerr < locerr) { // Take the min
 			currerr = locerr;
 			ind = i;			
@@ -370,11 +370,11 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 	return ind;
 }
 
-void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, bool c, std::vector<feature>& feats, int clas){
+void updateWeights(int& nTasks, int Taskid,std::vector<double>& weights,double& alfak,classifier& classf, std::vector<std::vector<std::vector<long>>>& tables, int nPos, std::vector<feature>& feats, int clas){
 	//TODO
 	for(int i = Taskid; i < weights.size(); i+=nTasks)
 	{//changed
-		if(c)
+		if(i<nPos)
 			weights[i] *= exp(-alfak*classf.calc(calcFeat(tables[i],feats[clas]))); // Conferir, pas sur...
 		else
 			weights[i] *= exp(alfak*classf.calc(calcFeat(tables[i],feats[clas])));
@@ -386,7 +386,7 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 	std::vector<std::thread> threads;
 	
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(updateWeights,std::ref(nTasks),i,std::ref(weights),std::ref(alfak),std::ref(classf),std::ref(tables), i<Npos, std::ref(feats), clas));
+		threads.push_back(std::thread(updateWeights, std::ref(nTasks),i,std::ref(weights),std::ref(alfak),std::ref(classf), std::ref(tables), Npos, std::ref(feats), clas));
 	
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();
@@ -405,11 +405,7 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 }
 
 std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats){//OK
-	//corrected initial weights
-	double w0Pos=0.5/nPos;
-	double w0Neg=0.5/(tables.size()-nPos);
-	std::vector<double> weights(nPos,w0Pos), aux(tables.size()-nPos,w0Neg);
-	weights.insert(weights.end(), aux.begin(), aux.end());
+	std::vector<double> weights(tables.size(),1.0/(2*tables.size()));
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error,alfak;
