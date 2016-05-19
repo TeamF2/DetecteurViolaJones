@@ -66,9 +66,9 @@ $(BIN): $(OBJS) $(BIN).cpp Makefile
 test_q_1_1: ImageIntegrale.* test_q_1_1.cpp Makefile
 		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp test_q_1_1.cpp $(LIBS)
 
-# rule for test Q1.2
-test_q_1_2: ImageIntegrale.* main.cpp Makefile
-		$(CXX) $(mpic++) $(INCLUDE) -o $@ ImageIntegrale.cpp test_q_1_2.cpp $(LIBS)
+# rule for test eps (Tests of epsilon and K)
+test_q_1_2: ImageIntegrale.* testEps.cpp Makefile
+		$(CXX) $(mpic++) $(INCLUDE) -o $@ ImageIntegrale.cpp testEps.cpp $(LIBS)
 
 # rule for main
 main: ImageIntegrale.* main.cpp Makefile
