@@ -62,19 +62,28 @@ int main(int argc, char** argv) {
 	cout << "We loaded the "<<iiTest.size()<<" test images!" << endl;
 
 
+	double thetaMin,thetaMax;
 	//7-Vary theta (-1<=theta<=1)
-	cout << "Testing strong classifier:" << endl;
-	std::vector<std::vector<long>> fauxNP;
-	for(double theta=-1;theta<=1;theta+=0.1){
-		fauxNP.push_back(test(nTasks,clasFinal,feats,testPos,classf, iiTest, theta));
-	}
-	
+	cout << "Test strong classifier:" << endl;
+	while(1){
 
-	cout << "Let's print the results!" << endl;
-	//print results
-	int i;
-	for(double theta=-1,i=0;theta<=-0.99;theta+=0.001,i++)
-		cout<<"Theta: "<<theta<<", f-: "<<fauxNP[i][0]<<", f+: "<<fauxNP[i][1]<<endl;
+		cout << "Enter thetaMin:" << endl;
+		cin >> thetaMin;
+		cout << "Enter thetaMax:" << endl;
+		cin>> thetaMax;
+
+		if(thetaMin==thetaMax)
+			break;
+		std::vector<std::vector<long>> fauxNP;
+		for(int i=0;i<11;i++){
+			fauxNP.push_back(test(nTasks,clasFinal,feats,testPos,classf, iiTest, thetaMin +i*(thetaMax-thetaMin)/10));
+		}
+		cout << "Let's print the results!" << endl;
+		//print results
+		for(int i=0;i<11;i++){
+			cout<<"Theta: "<< thetaMin +i*(thetaMax-thetaMin)/10 <<", f-: "<<fauxNP[i][0]<<", f+: "<<fauxNP[i][1]<<endl;
+		}
+	}
 	
 
 	return 0;
