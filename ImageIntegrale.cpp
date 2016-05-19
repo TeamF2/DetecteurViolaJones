@@ -332,7 +332,7 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		if(i==taskId) { // Initialize error  //changed i==0 to i==taskId;;  ind=0 to ind=taskId
 			currerr = locerr;
 			ind = taskId;
-		} else if(currerr < locerr) { // Take the min
+		} else if(locerr < currerr) { // Take the min
 			currerr = locerr;
 			ind = i;			
 		}
@@ -361,7 +361,7 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		if(i==0) { // Init
 			currerr = err[i];
 			ind = indices[i];
-		} else if(currerr < err[i]) { // Take the min
+		} else if(err[i] < currerr) { // Take the min
 			currerr = err[i]; // Update error
 			ind = indices[i]; // Update argmin(error)
 		}
@@ -385,6 +385,12 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 	//TODO
 	std::vector<std::thread> threads;
 	
+	for(int i = 0; i < weights.size(); ++i)
+		{ // normalising weigths
+			std::cout<<weights[i]<<",";
+		}
+		std::cout<<std::endl;
+
 	for(int i=0;i<nTasks;i++)
 		threads.push_back(std::thread(updateWeights, std::ref(nTasks),i,std::ref(weights),std::ref(alfak),std::ref(classf), std::ref(tables), Npos, std::ref(feats), clas));
 	
@@ -400,8 +406,9 @@ void parUpdateWeights(std::vector<double>& weights,double& alfak,classifier& cla
 	for(int i = 0; i < weights.size(); ++i)
 	{ // normalising weigths
 		weights[i] /= sum;
+		std::cout<<weights[i]<<",";
 	}
-	
+	std::cout<<std::endl;
 }
 
 std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf,std::vector<std::vector<std::vector<long>>>& tables, std::vector<feature>& feats){//OK
@@ -409,17 +416,18 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error,alfak;
-	int N=2;
+	int N=20;
 	std::cout << "Boost steps:" << std::endl;
 	for(int k=0;k<N;k++){
 		std::cout << k<<std::endl;
 		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);	///check
 		if(!error)
-			std::cout<<"In boost(): Error=0, dividing by 0!"<<std::endl;
+			std::cout<<"In boost(): Error=0, dividing by "<<error<< "!"<<std::endl;
 		else
 			std::cout<<"Error:"<<error<<std::endl;
 		std::cout<<"Index: "<<clas<<std::endl;
 		alfak=log((1-error)/error)/2;	///check
+		std::cout<<"AlfaK: "<<alfak<<std::endl;
 		f[clas]+=alfak;
 		parUpdateWeights(weights,alfak,classf[clas],tables, nTasks,nPos,feats,clas);
 	}
