@@ -408,7 +408,7 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	//corrected initial weights
 	double w0Pos=0.5/nPos;
 	double w0Neg=0.5/(tables.size()-nPos);
-	std::vector<double> weights(nPos,w0),aux(tables.size()-nPos,w0Neg);
+	std::vector<double> weights(nPos,w0Pos), aux(tables.size()-nPos,w0Neg);
 	weights.insert(weights.end(), aux.begin(), aux.end());
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
