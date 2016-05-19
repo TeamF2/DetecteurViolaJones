@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 			cout<<clasFinal[i];
 	cout<<endl;
 
-	/*
+
 	//6-read "Test" (test) repository images
 	iiTest=distII(nTasks,testPos,testNeg,repository+"test");
 	cout << "We loaded the "<<iiTest.size()<<" test images!" << endl;
@@ -75,7 +75,7 @@ int main(int argc, char** argv) {
 	int i;
 	for(double theta=-1,i=0;theta<=1;theta+=0.1,i++)
 		cout<<"Theta: "<<theta<<", f+: "<<(double)fauxNP[i][0]/(double)testPos<<", f-: "<<(double)fauxNP[i][1]/(double)testNeg<<endl;
-	*/
 	
+
 	return 0;
  }

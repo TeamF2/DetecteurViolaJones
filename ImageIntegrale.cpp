@@ -274,7 +274,7 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 	double r,xki;
 	int rr,c,h;
 	double eps=0.6; //0<eps<=1   /////////TODO
-	int K=1;		///////////TODO
+	int K=tables.size()/5;		///////////TODO
 
 	for(int i=taskId;i<feats.size();i+=nTasks){
 		for(int k=0;k<K;k++){
@@ -325,8 +325,14 @@ std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables
 		// Initialize the weighted error
 		for(int j = 0; j < weights.size(); ++j)
 		{
-			if(error(classf[i], i<nPos , feats[i], tables[j]))
-				locerr += weights[j];
+			if(i<nPos) {
+				if(error(classf[i], 1 , feats[i], tables[j]))
+					locerr += weights[j];
+			} else {
+				if(error(classf[i], -1 , feats[i], tables[j]))
+					locerr += weights[j];
+			}
+
 		}
 		
 		
@@ -417,10 +423,10 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error,alfak;
-	int N=20;
+	int N=9;
 	std::cout << "Boost steps:" << std::endl;
 	for(int k=0;k<N;k++){
-		std::cout << k<<std::endl;
+		std::cout << "Step : " << k << "/" << N << std::endl;
 		clas=parChooseClasf(nTasks,nPos,error,classf,weights,feats,tables);	///check
 		std::cout<<"Error:"<<error<<std::endl;
 		std::cout<<"Index: "<<clas<<std::endl;
