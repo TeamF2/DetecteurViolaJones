@@ -37,6 +37,8 @@ endif
 
 ifeq "$(SETUP)" "macosx "
   # macosx
+  # Loading libraries from X11
+  # For CImg uses
   $(info building for $(SETUP))
   INCLUDE = -I/usr/local/include -I/opt/X11/include
   LIBS = -lpthread -L/usr/local/lib -L/opt/X11/lib -lX11
@@ -62,23 +64,23 @@ all:	$(BIN) Makefile
 $(BIN): $(OBJS) $(BIN).cpp Makefile
 	$(CXX) $(FLAGS) $(INCLUDE) -o $(BIN) $(BIN).cpp $(OBJS) $(LIBS)
 
-# rule for test Q1.1
+# rule to run test Q1.1
 test_q_1_1: ImageIntegrale.* test_q_1_1.cpp Makefile
 		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp test_q_1_1.cpp $(LIBS)
 
-# rule for test eps (Tests of epsilon and K)
+# rule to run test eps (Tests of epsilon and K)
 testEps: ImageIntegrale.* testEps.cpp Makefile
-		$(CXX) $(mpic++) $(INCLUDE) -o $@ ImageIntegrale.cpp testEps.cpp $(LIBS)
+		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp testEps.cpp $(LIBS)
 
-# rule for main
+# rule to run main
 main: ImageIntegrale.* main.cpp Makefile
 		$(CXX) $(FLAGS) $(INCLUDE) -o $@ ImageIntegrale.cpp main.cpp $(LIBS)
 
-# clean objects and executable
+# rule to clean objects and executable
 clean:
 	$(RM) $(OBJS) $(BIN) test_q_1_1 testEps main
 
-# restore directory to pristine state
+# rule to restore directory to pristine state
 distclean: clean
 	$(RM) core *~
 
