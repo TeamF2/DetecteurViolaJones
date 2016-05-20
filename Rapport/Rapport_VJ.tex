@@ -53,116 +53,87 @@
     \tableofcontents
     \clearpage
 
+%%%%%%%%%%%%%%%%%%%%%
+%% DEBUT DU DOCUMENT %%%%%%
+%%%%%%%%%%%%%%%%%%%%%
 \section{Présentation du sujet}
 
 \paragraph{Introduction} 
-L'objectif de ce projet est: ...\\
-Example de code:
+Qual é o objetivo: ...\\
 
+\clearpage
 
-%\begin{lstlisting}
-%std::vector<std::vector<double> > IntegralImage(
-%std::vector<std::vector<long> >& data) {
-%	using namespace std;
-%	int m = data.size();
-%	int n = data[0].size();
-%	
-%  vector<vector<double> > output(m, vector<double>(n));
-%  
-%  output[0][0] = data[0][0];
-%  
-%  // initialize the first row
-%  for(unsigned int i = 1; i < m; ++i)
-%  {
-%	  output[i][0] = data[i][0] + output[i-1][0];
-%  }
-%  // initialize the first column
-%  for(unsigned int j= 1; j < n; ++j)
-%  {
-%	  output[0][j] = data[0][j] + output[0][j-1];
-%  }
-%  // Compute all the other values
-%  for(unsigned int i = 1; i < m; ++i)
-%  {
-%	for(unsigned int j = 1; j < n; ++j)
-%	{
-%		output[i][j] = 
-%		data[i][j] + output[i-1][j] + output[i][j-1] - output[i-1][j-1];
-%	}
-%  }
+%%%%%%%%%%%%%%%%%%%%%%%
+%% EXPLICATION ALGORITHME %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+\section{Explication succincte du algorithme}
+
+\subsection{L'algorithme}
+
+\subsection{Calcul de l'Image Intégrale}
+ref. Q.1.1
+
+\subsection{Définition des caractéristiques en parallèle}
+ref. Q1.2- commenter le nobre de caractéristiques ainsi obtenu
+
+\subsection{Entraînement des classifieurs faibles en parallèle}
+ref. Q.2.1, méthode Perceptron.
+ Commenter le choix de $\epsilon$ et $K$. à quoi sert $\epsilon$ ? à quoi sert $K$ ?
+
+\subsection{Boosting et choix de classifieurs}
+ref. Q2.2 Commenter le choix de N dans AdaBoost
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% TEST DES RÉSULTATS %%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Test et Analyse des résultats}
+
+\subsection{Variation et analyse du paramètre $\theta \in [-1,1]$}
+ref. Q.3.1. à quoi sert $\theta$ ?
+
+\subsection{Description de l'extension de l’algorithme pour des images quelconques}
+ref. Q.3.1
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%
+%% CONCLUSION? %%%%%%
+%%%%%%%%%%%%%%%%%
+
+%\section{Conclusion}
 %
-%	return output;
-%}
+%Voici la conclusion de notre projet.
 %
-%\end{lstlisting}
-%% Use this to include files
-%% \code{Models}{../testapp/models.py}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% LIGNE FINALE DE LA CONCLUSION %%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{center}
+%\color{bleu303}
+%\rule{0.3\textwidth}{0.2mm}\vspace*{-3.5mm}
+%\rule{0.5\textwidth}{0.6mm}\vspace*{-3.8mm}
+%\rule{0.3\textwidth}{0.2mm}\vspace*{-1mm}
+%\sffamily FIN
+%\end{center}
+% \clearpage
+ 
+%%%%%%%%%%%%%%
+%%    BIBLIOGRAFIA %%
+%%%%%%%%%%%%%%
 
-
-\paragraph{Aunautre paragraphe}
-
-        ICI une extention du sujet
-
-    \clearpage
-    
-\section{Q1.1}
-
-        \subsection{Mise en place des moyens de communication}
-
-            Nous avions décidé d'utiliser les moyens de communication suivants~:
-           
-
-    \clearpage
-    \section{Q.2}
-
-        Après révision des objectifs, voici ceux que nous souhaitons conserver pour cette deuxième partie de projet~:
-
-        \begin{itemize}[label=\color{bleu303}\textbullet{}]
-            \item Accélérer le programme pour le DNS poisoning
-            \item Accélérer le programme TCP et anticiper sur les réponses suivantes
-            \item Comment bloquer les attaques ci-dessus~?
-        \end{itemize}
-
-        \subsection{Accélérer le programme pour le DNS poisoning}
-
-            kvejrkojvikre
-
-        \subsection{Accélérer le programme TCP}% ne suis pas passé par ici
-
-            lkfrfrf
-
-        \subsection{Comment bloquer les attaques ci-dessus?}
-
-            edokde
-
-    \clearpage
-   % \addcontentsline{toc}{section}{Conclusion}
-    \section{Conclusion}
-
-        Voici la conclusion de notre projet.
-
-    \begin{center}
-        \color{bleu303}
-
-        \rule{0.3\textwidth}{0.2mm}\vspace*{-3.5mm}
-
-        \rule{0.5\textwidth}{0.6mm}\vspace*{-3.8mm}
-
-        \rule{0.3\textwidth}{0.2mm}\vspace*{-1mm}
-
-        \sffamily FIN
-    \end{center}
-    
-%    BIBLIOGRAFIA
-
-    \clearpage
-        \section{Références bibliographiques}
+\section{Références bibliographiques}
         {
         \renewcommand{\section}[2]{} % pour virer le titre "Références"
-        \nocite{*}
+        \nocite{*} %% INCLUDE ALL BIB
         \bibliographystyle{plain}
         \bibliography{Rapport_VJ.bib}
         }
-
+        
+%%%%%%%%%%%%%%%%%%%%%
+%% FIN DU DOCUMENT %%%%%%
+%%%%%%%%%%%%%%%%%%%%%
     
 \end{document}
