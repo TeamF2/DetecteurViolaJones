@@ -1,0 +1,168 @@
+\documentclass[a4paper, 12pt,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[frenchb,noconfigs]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[scaled]{beramono}
+\renewcommand*\familydefault{ttdefault}
+\usepackage{listings}
+\lstset{
+  language=[GNU]C++,
+  showstringspaces=false,
+  formfeed=\newpage,
+  tabsize=4,
+  commentstyle=\itshape,
+  basicstyle=\ttfamily,
+  morekeywords={models, lambda, forms}
+}
+
+\newcommand{\code}[2]{
+  \hrulefill
+  \subsection*{#1}
+  \lstinputlisting{#2}
+  \vspace{2em}
+}
+
+\usepackage{lmodern,textcomp,ifthen,graphicx,enumitem}
+\usepackage[notes,
+            titlepage,
+            a4paper,
+            pagenumber,
+            sectionmark,
+            twoside,
+            fancysections]{polytechnique}
+\usepackage[colorlinks=true,
+            linkcolor=black,%bleu303,
+            filecolor=red,
+            urlcolor=bleu303,
+            bookmarks=true,
+            bookmarksopen=true]{hyperref}
+
+\title{Détecteur de Viola Jones}
+\subtitle{Projet \\ INF 442}
+\author{
+	Responsable~: J.-P. Bordes \\
+        Felipe \textsc{Garcia} \\
+        Francisco Eckhardt \\
+        }
+\date\today
+
+\begin{document}
+    \maketitle
+    \renewcommand{\baselinestretch}{1.1}
+    \setlength{\parskip}{0.5em}
+    \tableofcontents
+    \clearpage
+
+\section{Présentation du sujet}
+
+\paragraph{Introduction} 
+L'objectif de ce projet est: ...\\
+Example de code:
+
+
+%\begin{lstlisting}
+%std::vector<std::vector<double> > IntegralImage(
+%std::vector<std::vector<long> >& data) {
+%	using namespace std;
+%	int m = data.size();
+%	int n = data[0].size();
+%	
+%  vector<vector<double> > output(m, vector<double>(n));
+%  
+%  output[0][0] = data[0][0];
+%  
+%  // initialize the first row
+%  for(unsigned int i = 1; i < m; ++i)
+%  {
+%	  output[i][0] = data[i][0] + output[i-1][0];
+%  }
+%  // initialize the first column
+%  for(unsigned int j= 1; j < n; ++j)
+%  {
+%	  output[0][j] = data[0][j] + output[0][j-1];
+%  }
+%  // Compute all the other values
+%  for(unsigned int i = 1; i < m; ++i)
+%  {
+%	for(unsigned int j = 1; j < n; ++j)
+%	{
+%		output[i][j] = 
+%		data[i][j] + output[i-1][j] + output[i][j-1] - output[i-1][j-1];
+%	}
+%  }
+%
+%	return output;
+%}
+%
+%\end{lstlisting}
+%% Use this to include files
+%% \code{Models}{../testapp/models.py}
+
+
+\paragraph{Aunautre paragraphe}
+
+        ICI une extention du sujet
+
+    \clearpage
+    
+\section{Q1.1}
+
+        \subsection{Mise en place des moyens de communication}
+
+            Nous avions décidé d'utiliser les moyens de communication suivants~:
+           
+
+    \clearpage
+    \section{Q.2}
+
+        Après révision des objectifs, voici ceux que nous souhaitons conserver pour cette deuxième partie de projet~:
+
+        \begin{itemize}[label=\color{bleu303}\textbullet{}]
+            \item Accélérer le programme pour le DNS poisoning
+            \item Accélérer le programme TCP et anticiper sur les réponses suivantes
+            \item Comment bloquer les attaques ci-dessus~?
+        \end{itemize}
+
+        \subsection{Accélérer le programme pour le DNS poisoning}
+
+            kvejrkojvikre
+
+        \subsection{Accélérer le programme TCP}% ne suis pas passé par ici
+
+            lkfrfrf
+
+        \subsection{Comment bloquer les attaques ci-dessus?}
+
+            edokde
+
+    \clearpage
+   % \addcontentsline{toc}{section}{Conclusion}
+    \section{Conclusion}
+
+        Voici la conclusion de notre projet.
+
+    \begin{center}
+        \color{bleu303}
+
+        \rule{0.3\textwidth}{0.2mm}\vspace*{-3.5mm}
+
+        \rule{0.5\textwidth}{0.6mm}\vspace*{-3.8mm}
+
+        \rule{0.3\textwidth}{0.2mm}\vspace*{-1mm}
+
+        \sffamily FIN
+    \end{center}
+    
+%    BIBLIOGRAFIA
+
+    \clearpage
+        \section{Références bibliographiques}
+        {
+        \renewcommand{\section}[2]{} % pour virer le titre "Références"
+        \nocite{*}
+        \bibliographystyle{plain}
+        \bibliography{Rapport_VJ.bib}
+        }
+
+    
+\end{document}
