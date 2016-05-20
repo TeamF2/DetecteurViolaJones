@@ -11,6 +11,7 @@
 void calcError(int& nTasks,int taskId, int& nPos, double& error,std::vector<classifier>& classf,
 		std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	double y;
+    error=0;
 	for(int k=taskId;k<classf.size();k+=nTasks){
 		for(int j=0;j<tables.size();j++){	
 			y=(classf[k].calc(calcFeat(tables[j],feats[k])));
@@ -18,12 +19,12 @@ void calcError(int& nTasks,int taskId, int& nPos, double& error,std::vector<clas
 				y=y-1;
 			else
 				y=y+1;
-			error+=y*y;
+            error+=std::abs(y)/2;
 		}
 	}
 }
 
-double parError(int& nTasks, int& nPos, double& error,std::vector<classifier>& classf,
+double parError(int& nTasks, int& nPos,std::vector<classifier>& classf,
 		std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
 	std::vector<std::thread> threads;
 	std::vector<double> err(nTasks,0);
@@ -75,15 +76,15 @@ int main(int argc, char** argv) {
 		cout<<"Eps: "<<eps<<endl;
 		classf.clear();
 		classf = std::vector<classifier>(feats.size(), classifier::classifier());
-		int K=50,KK=10;
+		int K=1,KK=1;
 		double error;
 		parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,K);
-		error=parError(nTasks,trainPos,error,classf,feats,iiTrain);
+		error=parError(nTasks,trainPos,classf,feats,iiTrain);
 		cout<<"Error: "<<error<<endl;
 		myfile<<"Eps: "<<eps<<"; K: "<<K<<"; error: "<<error<<" \n";
-		for(int k=1;k<=15;k++){
+		for(int k=1;k<=9;k++){
 			parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,KK);
-			error=parError(nTasks,trainPos,error,classf,feats,iiTrain);
+			error=parError(nTasks,trainPos,classf,feats,iiTrain);
 			cout<<"Error: "<<error<<endl;
 			myfile<<"Eps: "<<eps<<"; K: "<<K+k*KK<<"; error: "<<error<<" \n";
 		}
