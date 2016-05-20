@@ -89,7 +89,7 @@
 
 \subsection{Définition des caractéristiques en parallèle}
 
-	On a créée la classe auxiliaire feature pour représenter une caractéristique, avec les champs représentant position, largeur, hauteur et type de caractéristique (conforme à la Figure \ref{caracteristiques}).
+	On a créé la classe auxiliaire feature pour représenter une caractéristique, avec les champs représentant position, largeur, hauteur et type de caractéristique (conforme à la Figure \ref{caracteristiques}).
 	
 	Pour créer des différentes caractéristiques, on a imposé aux côtés des rectangles une taille minimale de 8 pixels et on a pris un incrément minimal de position et de taille de  4 pixels. La fonction \func{distFeat} lance 4 threads responsables de créer les caractéristiques de chaque type (‘a’, ‘b’, ‘c’ et ‘d’), puis les retourne dans un même vecteur. On a ainsi obtenu 128227 caractéristiques au total.
 
@@ -127,11 +127,12 @@
 \section{Test et Analyse des résultats}
 
 \subsection{Variation en fonction du paramètre $\theta \in [-1,1]$}
-ref. Q.3.1. à quoi sert $\theta$ ?
+
+	On a créé un programme pour tester la performance de notre classifieur F en fonction de $\theta$ en calculant le taux de faux négatifs et faux positifs dans un intervalle [$\theta_{min}$, $\theta_{max}$] choisi par l'utilisateur. Les autres paramètres peuvent aussi être modifiés dans le code.
 
 \subsection{Extension de l’algorithme}
-ref. Q.3.1
 
+	Notre algorithme est prêt à calculer l'Image Intégrale d'images de n'importe quelle taille. Pour l'adapter il faut donc suivre l'approche proposé par Viola et Jones ([4]) de redimensionner les caractéristiques au lieu de redimensionner les images et les faire parcourir toute l'image.
 \clearpage
  
 %%%%%%%%%%%%%%
