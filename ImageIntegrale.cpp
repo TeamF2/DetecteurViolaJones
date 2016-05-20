@@ -233,6 +233,8 @@ bool error(classifier& classf, int c,feature& feat,std::vector<std::vector<long>
 
 void chooseClasf(int& nTasks, int taskId, int& nPos, double& currerr,int& ind,
 std::vector<classifier>& classf, std::vector<double>& weights,
+                 std::vector<feature>& feats, std::vector<std::vector<std::vector<long>>>& tables){
+
 	// Modifies error and ind to the
 	// min err and his index
 	double locerr = 0;
