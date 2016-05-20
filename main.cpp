@@ -12,6 +12,8 @@ int main(int argc, char** argv) {
 	
 	cout << "Starting main..." << endl;
 
+    
+    //Initialisation
 	std::vector<std::vector<std::vector<long> > > iiTrain,iiValidation,iiTest;
 	std::vector<feature> feats;
 	std::vector<double> clasFinal;
@@ -19,8 +21,8 @@ int main(int argc, char** argv) {
 	int width=112,height=92;
 	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415,testPos=818,testNeg=4415;
 	int nTasks=std::thread::hardware_concurrency();
-	double eps=1;//perceptron's learning rate
-	int K=(trainPos+trainNeg)/5;
+	double eps=1;                   //perceptron's learning rate
+	int K=(trainPos+trainNeg)/5;    //training steps
 
 	if(argc==2)
 		nTasks=std::atoi(argv[1]);
@@ -65,28 +67,28 @@ int main(int argc, char** argv) {
 
 
 	double thetaMin,thetaMax;
-	//7-Vary theta (-1<=theta<=1)
+	//7-Theta testing
 	cout << "Test strong classifier:" << endl;
 	while(1){
 
 		cout << "Enter thetaMin:" << endl;
 		cin >> thetaMin;
-		cout << "Enter thetaMax:" << endl;
+        cout<<"Enter thetaMax:"<<endl;
 		cin>> thetaMax;
 
 		if(thetaMin==thetaMax)
 			break;
+        
 		std::vector<std::vector<long>> fauxNP;
 		for(int i=0;i<11;i++){
 			fauxNP.push_back(test(nTasks,clasFinal,feats,testPos,classf, iiTest, thetaMin +i*(thetaMax-thetaMin)/10));
 		}
-		cout << "Let's print the results!" << endl;
+		cout << "The results!" << endl;
 		//print results
 		for(int i=0;i<11;i++){
 			cout<<"Theta: "<< thetaMin +i*(thetaMax-thetaMin)/10 <<", f-: "<<fauxNP[i][0]<<", f+: "<<fauxNP[i][1]<<endl;
 		}
 	}
 	
-
 	return 0;
  }

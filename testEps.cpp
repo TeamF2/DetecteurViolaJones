@@ -76,13 +76,13 @@ int main(int argc, char** argv) {
 		cout<<"Eps: "<<eps<<endl;
 		classf.clear();
 		classf = std::vector<classifier>(feats.size(), classifier::classifier());
-		int K=1,KK=1;
+		int K=1000,KK=1000;
 		double error;
 		parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,K);
 		error=parError(nTasks,trainPos,classf,feats,iiTrain);
 		cout<<"Error: "<<error<<endl;
 		myfile<<"Eps: "<<eps<<"; K: "<<K<<"; error: "<<error<<" \n";
-		for(int k=1;k<=9;k++){
+		for(int k=1;k<=4;k++){
 			parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,KK);
 			error=parError(nTasks,trainPos,classf,feats,iiTrain);
 			cout<<"Error: "<<error<<endl;
