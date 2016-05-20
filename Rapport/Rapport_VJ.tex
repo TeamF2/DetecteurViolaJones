@@ -22,6 +22,14 @@
   \vspace{2em}
 }
 
+\newcommand{\func}[1]{
+\textbf{\texttt{#1}()}
+}
+
+\newcommand{\param}[1]{
+\texttt{#1}
+}
+
 \usepackage{lmodern,textcomp,ifthen,graphicx,enumitem}
 \usepackage[notes,
             titlepage,
@@ -40,7 +48,7 @@
 \title{Détecteur de Viola Jones}
 \subtitle{Projet \\ INF 442}
 \author{
-	Responsable~: J.-P. Bordes \\
+	Responsable du projet~: Jean Baptiste Bordes \\
         Felipe \textsc{Garcia} \\
         Francisco Eckhardt \\
         }
@@ -58,30 +66,57 @@
 %%%%%%%%%%%%%%%%%%%%%
 \section{Présentation du sujet}
 
-\paragraph{Introduction} 
-Qual é o objetivo: ...\\
+	L’objectif de notre projet est d’implémenter un détecteur de visages basé sur les caractéristiques introduites par Viola et Jones. Pour cela, on utilise des vecteurs de caractéristiques qui correspondent à un grand nombre de régions et tailles différentes possibles qu’on calculera pour plusieurs images. On les utilise à la fin dans la prise de décision (détection). 
+	
+	Dans le cadre de l’analyse des images nous avons utilisé la bibliothèque Open Source \param{CImg} pour accéder aux pixels et transformer les fichiers \param{.jpg} en matrices de \param{long} en C++. Ces matrices sont converties en Images Intégrales pour un traitement postérieur.
+	
+	La deuxième partie de notre projet ce concentre sur la création des classifieurs qui discernent entre images de visages et de non visages. Nous avons utilisé l’algorithme du perceptron pour leur apprendre cette tâche. Ces résultats préliminaires sont ensuite pris par AdaBoost pour augmenter le pourcentage de détection de faces.
+	
+	Dans la phase finale ce centre sur la discussion de la précision de notre classifieur final en fonction du paramètre extérieur $\theta$ par une analyse de faux positifs et faux négatifs. Puis nous faisons une extension de notre algorithme pour repérer des visages dans des images quelconques.
 
 \clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %% EXPLICATION ALGORITHME %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%
-\section{Explication succincte du algorithme}
+\section{Explication de l'algorithme}
 
-\subsection{L'algorithme}
 
 \subsection{Calcul de l'Image Intégrale}
-ref. Q.1.1
+	
+	On ouvre l’image avec l’aide de la bibliothèque \param{CImg} comme une matrice de \param{long}, on la parcourt une seule fois (fonction \func{SAT}), avec deux boucles \param{for}, l’une pour la hauteur et l’autre pour la largeur, en calculant l’image intégrale. On a utilisé la fonction \func{printData} pour en tester le bon fonctionnement dans le fichier \param{test\_q\_1\_1.cpp}.
+
 
 \subsection{Définition des caractéristiques en parallèle}
-ref. Q1.2- commenter le nobre de caractéristiques ainsi obtenu
+
+	On a créée la classe auxiliaire feature pour représenter une caractéristique, avec les champs représentant position, largeur, hauteur et type de caractéristique (conforme à la Figure \ref{caracteristiques}).
+	
+	Pour créer des différentes caractéristiques, on a imposé aux côtés des rectangles une taille minimale de 8 pixels et on a pris un incrément minimal de position et de taille de  4 pixels. La fonction \func{distFeat} lance 4 threads responsables de créer les caractéristiques de chaque type (‘a’, ‘b’, ‘c’ et ‘d’), puis les retourne dans un même vecteur. On a ainsi obtenu 128227 caractéristiques au total.
+
+
+%%%%%%%%%%%%%
+%% IMAGE %%%%%%
+%%%%%%%%%%%%%
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.8]{charact}
+\caption{Types des caractéristiques utilisées}
+\label{caracteristiques}
+\end{figure}
+%%%%%%%%%%%%%
+%%%END IMAGE%%%%
+%%%%%%%%%%%%%
 
 \subsection{Entraînement des classifieurs faibles en parallèle}
-ref. Q.2.1, méthode Perceptron.
- Commenter le choix de $\epsilon$ et $K$. à quoi sert $\epsilon$ ? à quoi sert $K$ ?
+
+	À chaque caractéristique on associe un classifieur faible ($h_i$, représentés par la classe auxiliaire classifier, avec deux paramètres $w_1$ et $w_2$ et la fonction \param{calc(x)} qui renvoie $h(x)$, conforme défini dans le sujet). Chaque classifieur faible est entraîné en utilisant la méthode du Perceptron.
+	
+	Les fonctions auxiliaires \func{readImgs} et \func{distII} sont responsables d’ouvrir et de calculer l’image intégrale des images d’un répertoire de manière parallélisée, ce qu’on a utilisé pour les trois répertoires “Train”, “Validation” et “Test”. De même pour l’entraînement : on distribue entre les \param{threads} différents classifieurs pour qu’ils les travaillent parallèlement.
+
 
 \subsection{Boosting et choix de classifieurs}
-ref. Q2.2 Commenter le choix de N dans AdaBoost
+
+	On utilise l’algorithme Adaboost pour créer un classifieur final en utilisant une combinaison linéaire de classifieurs faibles précédemment définies. L’idée consiste en donner plus de poids pour les classifieurs les plus performants et ainsi obtenir un classifieur final qui les prend en compte de façon pondérée. Les étapes de choix du classifieur faible et de mise à jour des poids ($\lambda_i $ pour $ i \in \{1, \ldots, n\}$) sont faites en parallèle.
 
 \clearpage
 
@@ -91,34 +126,13 @@ ref. Q2.2 Commenter le choix de N dans AdaBoost
 
 \section{Test et Analyse des résultats}
 
-\subsection{Variation et analyse du paramètre $\theta \in [-1,1]$}
+\subsection{Variation en fonction du paramètre $\theta \in [-1,1]$}
 ref. Q.3.1. à quoi sert $\theta$ ?
 
-\subsection{Description de l'extension de l’algorithme pour des images quelconques}
+\subsection{Extension de l’algorithme}
 ref. Q.3.1
 
 \clearpage
-
-%%%%%%%%%%%%%%%%%
-%% CONCLUSION? %%%%%%
-%%%%%%%%%%%%%%%%%
-
-%\section{Conclusion}
-%
-%Voici la conclusion de notre projet.
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% LIGNE FINALE DE LA CONCLUSION %%
-%%%%%%%%%%%%%%%%%%%%%%%%%
-%\begin{center}
-%\color{bleu303}
-%\rule{0.3\textwidth}{0.2mm}\vspace*{-3.5mm}
-%\rule{0.5\textwidth}{0.6mm}\vspace*{-3.8mm}
-%\rule{0.3\textwidth}{0.2mm}\vspace*{-1mm}
-%\sffamily FIN
-%\end{center}
-% \clearpage
  
 %%%%%%%%%%%%%%
 %%    BIBLIOGRAFIA %%
