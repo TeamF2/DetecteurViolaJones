@@ -270,14 +270,12 @@ std::vector<std::vector<std::vector<long> > > distII(int& nTasks, int& nPos,int&
 }
 
 void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
-		std::vector<classifier>& classf, std::vector<feature>& feats, double& eps ){///TODO: Conferir o eps e o K
+		std::vector<classifier>& classf, std::vector<feature>& feats, double& eps, int& K ){///TODO: Conferir o eps e o K
 	srand(taskId);
 	double r,xki;
 	int rr,c,h;
-	int K=tables.size()/5;		///////////Paramet
 
-
-	for(int i=taskId;i<feats.size();i+=nTasks){
+	for(int i=taskId;i<feats.size();i+=nTasks){ //each classifier is trained in K-steps
 		for(int k=0;k<K;k++){
 			r=(double) rand()/(double)RAND_MAX; // fix srand() -> rand()
 			rr=(int)(r*tables.size()); //removed -1, corrected cast
@@ -297,10 +295,10 @@ void train(int& nTasks, int taskId,int& nPos, std::vector<std::vector<std::vecto
 }
 
 void parTrain(int& nTasks,int& nPos, std::vector<std::vector<std::vector<long>>>& tables,
-		std::vector<classifier>& classf, std::vector<feature>& feats , double& eps){//OK
+		std::vector<classifier>& classf, std::vector<feature>& feats , double& eps, int& K){//OK
 	std::vector<std::thread> threads;
 	for(int i=0;i<nTasks;i++)
-		threads.push_back(std::thread(train,std::ref(nTasks),i,std::ref(nPos),std::ref(tables),std::ref(classf),std::ref(feats),std::ref(eps)));
+		threads.push_back(std::thread(train,std::ref(nTasks),i,std::ref(nPos),std::ref(tables),std::ref(classf),std::ref(feats),std::ref(eps),std::ref(K)));
 
 	for(int i=0;i<nTasks;i++)
 		threads[i].join();
