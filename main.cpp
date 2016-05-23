@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
 	int width=112,height=92;
 	int trainPos=818,trainNeg=4415,validationPos=818,validationNeg=4415,testPos=818,testNeg=4415;
 	int nTasks=std::thread::hardware_concurrency();
-	double eps=0.3;                  //perceptron's learning rate
-	int K=20;    //training steps
+	double eps=0.7;                  //perceptron's learning rate
+	int K=10;    //training steps
 
 	if(argc==2)
 		nTasks=std::atoi(argv[1]);
@@ -57,7 +57,7 @@ int main(int argc, char** argv) {
 	cout<<"Printing strong classifier weights:"<<endl;
 	for(int i=0;i<clasFinal.size();i++)
 		if(clasFinal[i])
-			cout<<clasFinal[i]<<" ; ";
+			cout<<"Index "<<i<<": "<<clasFinal[i]<<"; ";
 	cout<<endl;
 
 

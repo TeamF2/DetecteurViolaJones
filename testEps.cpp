@@ -13,14 +13,17 @@ void calcError(int& nTasks,int taskId, int& nPos, double& error,std::vector<clas
 	double y;
     error=0;
 	for(int k=taskId;k<classf.size();k+=nTasks){
+        
+        double err=0;
 		for(int j=0;j<tables.size();j++){	
 			y=(classf[k].calc(calcFeat(tables[j],feats[k])));
 			if(j<nPos)
 				y=y-1;
 			else
 				y=y+1;
-            error+=std::abs(y)/2;
+            err+=std::abs(y)/2;
 		}
+        error+=err/tables.size();
 	}
 }
 
@@ -40,6 +43,12 @@ double parError(int& nTasks, int& nPos,std::vector<classifier>& classf,
 	return err[0];
 }
 
+void printFeat(std::vector<feature>& feats, int a){
+    using namespace std;
+    cout << "Feature "<<a<<":\nx: "<<feats[a].x<<", y: "<<feats[a].y<<"w: "<<feats[a].w<<", h: "<<feats[a].h<<"type: "<<feats[a].type<<endl;
+}
+
+
 int main(int argc, char** argv) {
 	using namespace std;
 	using namespace cimg_library;
@@ -57,38 +66,64 @@ int main(int argc, char** argv) {
 
 	if(argc==2)
 		nTasks=std::atoi(argv[1]);
+    
 
 	cout << "Using "<<nTasks<<" threads." << endl;
 
 	//1-Define features
 	feats=distFeat(width,height);
 	cout << "We have "<<feats.size()<<" features!" << endl;
-		
-	//2-Read "Train" (app) repository images
+    
+    //2-Read "Train" (app) repository images
 	iiTrain=distII(nTasks,trainPos,trainNeg,repository+"app");
 	cout << "We loaded the "<<iiTrain.size()<<" train images!" << endl;
 
 	//3-Create weak classifiers
 	std::vector<classifier> classf(feats.size(), classifier::classifier());
 	cout << "Created classifiers vector!" << endl;
+    
+    //4-Read "Validation" (dev) repository images
+    iiValidation=distII(nTasks,validationPos,validationNeg,repository+"dev");
+    cout << "We loaded the "<<iiValidation.size()<<" validation images!" << endl;
 
-	for(double eps=0.05;eps<=1;eps+=.05){
+    cout<<"Testing for eps & K "<<endl;
+	for(double eps=0.1;eps<=1;eps+=.1){
 		cout<<"Eps: "<<eps<<endl;
 		classf.clear();
 		classf = std::vector<classifier>(feats.size(), classifier::classifier());
-		int K=1000,KK=1000;
+		int K=1,KK=1;
 		double error;
 		parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,K);
-		error=parError(nTasks,trainPos,classf,feats,iiTrain);
-		cout<<"Error: "<<error<<endl;
+		error=parError(nTasks,trainPos,classf,feats,iiValidation);
+		//cout<<"Error: "<<error<<endl;
 		myfile<<"Eps: "<<eps<<"; K: "<<K<<"; error: "<<error<<" \n";
-		for(int k=1;k<=4;k++){
+		for(int k=1;k<=9;k++){
 			parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,KK);
 			error=parError(nTasks,trainPos,classf,feats,iiTrain);
-			cout<<"Error: "<<error<<endl;
-			myfile<<"Eps: "<<eps<<"; K: "<<K+k*KK<<"; error: "<<error<<" \n";
+			//cout<<"Error: "<<error<<endl;
+			myfile<<"Eps: "<<eps<<"; K: "<<K+k*KK<<"; AvgError:% "<<error<<" \n";
 		}
-	}	
+	}
+    
+    for(double eps=0.1;eps<=1;eps+=.1){
+        cout<<"Eps: "<<eps<<endl;
+        classf.clear();
+        classf = std::vector<classifier>(feats.size(), classifier::classifier());
+        int K=10,KK=10;
+        double error;
+        parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,K);
+        error=parError(nTasks,trainPos,classf,feats,iiValidation);
+        //cout<<"Error: "<<error<<endl;
+        myfile<<"Eps: "<<eps<<"; K: "<<K<<"; error: "<<error<<" \n";
+        for(int k=1;k<=9;k++){
+            parTrain(nTasks,trainPos,iiTrain,classf,feats,eps,KK);
+            error=parError(nTasks,trainPos,classf,feats,iiTrain);
+            //cout<<"Error: "<<error<<endl;
+            myfile<<"Eps: "<<eps<<"; K: "<<K+k*KK<<"; AvgError:% "<<error<<" \n";
+        }
+    }	
+
+    
 	myfile.close();
 	return 0;
 }

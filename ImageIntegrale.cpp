@@ -244,7 +244,7 @@ std::vector<classifier>& classf, std::vector<double>& weights,
 		// Initialize the weighted error
 		for(int j = 0; j < weights.size(); ++j)
 		{
-			if(i<nPos) {
+			if(j<nPos) { /////////////////// CHANGED HERE from (i<nPos) to (j<nPos)
 				if(error(classf[i], 1 , feats[i], tables[j]))
 					locerr += weights[j];
 			} else {
@@ -340,7 +340,7 @@ std::vector<double> boost(int& nTasks,int& nPos, std::vector<classifier>& classf
 	std::vector<double> f(classf.size(),0);
 	int clas=0;
 	double error,alfak;
-	int N=9;  ////Paramet
+	int N=13;  ////Paramet
 	std::cout << "Boost steps:" << std::endl;
 	for(int k=0;k<N;k++){
 		std::cout << "Step : " << k << "/" << N << std::endl;
