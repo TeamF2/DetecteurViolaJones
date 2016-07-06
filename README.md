@@ -1,5 +1,6 @@
 # DetecteurViolaJones
 Project in C++ where we implement a Viola-Jones face recognition detector
+
 **Keywords**: Viola-Jones, face recognition, Haar features, AdaBoost, classifiers.
 
 ## Introduction
