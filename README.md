@@ -18,5 +18,7 @@ installed in order to use the CImg library. To run the codes just do one of:
 	make clean # clean extra files
 ##References
 [1] Yoav Freund and Robert E. Schapire. A decision-theoretic generalization of on-line learning and an application to boosting. 1997.
+
 [2] Frank Rosenblatt. The perceptron: A probabilistic model for information storage and organi- zation in the brain. In Psychological Review, volume 65, pages 386–408, 1958.
+
 [3] Paul Viola and Michael Jones. Robust real-time object detection. In International Journal of Computer Vision, 2001.
