@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Detecteurviolajones : Implementation en C++ d&#39;un détecteur de Viola Jones">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Detecteurviolajones</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/TeamMaromba/DetecteurViolaJones">View on GitHub</a>
+
+          <h1 id="project_title">Detecteurviolajones</h1>
+          <h2 id="project_tagline">Implementation en C++ d&#39;un détecteur de Viola Jones</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/TeamMaromba/DetecteurViolaJones/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/TeamMaromba/DetecteurViolaJones/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="detecteurviolajones" class="anchor" href="#detecteurviolajones" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DetecteurViolaJones</h1>
+
+<p>Project in C++ where we implement a Viola-Jones face recognition detector</p>
+
+<p><strong>Keywords</strong>: Viola-Jones, face recognition, Haar features, AdaBoost, classifiers.</p>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>The objective of this project is to implement a Viola Jones face recognition system.
+For that we have used the open library <code>CImg</code> to load the images. At the end we have implemented a 
+robust classifier wich is used to distinguish faces and non faces. The results can be found in the directory Rapport (in french)
+and the Scripts in C++ in the directory Scripts.</p>
+
+<h2>
+<a id="how-to-install" class="anchor" href="#how-to-install" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to install</h2>
+
+<p>Justs clone the github repo. It is required to have <a href="http://www.imagemagick.org/script/install-source.php">ImageMagik</a> 
+installed in order to use the CImg library. To run the codes just do one of:</p>
+
+<pre><code>make test_q_1_1 # test the integral image
+make testEps # test for epsilon and K (see raport)
+make main # test the viola-jones algorithm
+make clean # clean extra files
+</code></pre>
+
+<h2>
+<a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
+
+<p>[1] Yoav Freund and Robert E. Schapire. A decision-theoretic generalization of on-line learning and an application to boosting. 1997.</p>
+
+<p>[2] Frank Rosenblatt. The perceptron: A probabilistic model for information storage and organi- zation in the brain. In Psychological Review, volume 65, pages 386–408, 1958.</p>
+
+<p>[3] Paul Viola and Michael Jones. Robust real-time object detection. In International Journal of Computer Vision, 2001.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Detecteurviolajones maintained by <a href="https://github.com/TeamMaromba">TeamMaromba</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
