@@ -4,13 +4,13 @@ C++ project implementing a Viola-Jones face detector.
 **Keywords**: Viola-Jones, face recognition, Haar features, AdaBoost, classifiers.
 
 ## Introduction
-The objective of this project is to implement a Viola-Jones face recognition system.
-For that we have used the open library `CImg` to load the images. At the end we have implemented a
+The objective of this project is to implement a Viola-Jones face recognition system.  
+We have used the open library `CImg` to load the images. At the end we have implemented a
 strong classifier used to distinguish faces and non-faces. The results and the report can be found in the Rapport directory (in French)
-and the C++ file in the Scripts directory.
+and the C++ files in the Scripts directory.
 
 ## How to
-Note: [ImageMagick](http://www.imagemagick.org/script/install-source.php) package required in order to use the `CImg` library.
+Note: [ImageMagick](http://www.imagemagick.org/script/install-source.php) package required in order to use the `CImg` library.  
 Clone the github repository and run do one of the following commands:
 
 	make test_q_1_1 # test the integral image
