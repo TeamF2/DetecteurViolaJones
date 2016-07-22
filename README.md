@@ -11,7 +11,7 @@ and the C++ files in the Scripts directory.
 
 ## How to
 Note: [ImageMagick](http://www.imagemagick.org/script/install-source.php) package required in order to use the `CImg` library.  
-Clone the github repository and run do one of the following commands:
+Clone the github repository and run one of the following commands:
 
 	make test_q_1_1 # test the integral image
 	make testEps # test for epsilon and K (see report)
